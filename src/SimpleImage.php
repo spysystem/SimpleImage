@@ -15,6 +15,7 @@ namespace SpyClaviska;
 */
 
 use Exception;
+use League\ColorExtractor\Color;
 
 /**
  * Class SpyClaviska\SimpleImage
@@ -778,17 +779,23 @@ class SimpleImage
 	// Proportionally shrink an image to fit within a specified width/height
 
 	/**
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $size
-	 * @param bool $resample
-	 * @param null $quality
-	 * @param null $new_type
-	 * @param bool $white_background
+	 * @param        $src
+	 * @param        $dest
+	 * @param        $size
+	 * @param bool   $resample
+	 * @param null   $quality
+	 * @param null   $new_type
+	 * @param bool   $white_background
+	 * @param string $background_color
 	 * @return bool
 	 */
-	static function shrink_to_square($src, $dest, $size, $resample = true, $quality = null, $new_type = null, $white_background = false)
+	static function shrink_to_square($src, $dest, $size, $resample = true, $quality = null, $new_type = null, $white_background = false, $background_color = null)
 	{
+		if($background_color === null)
+		{
+			$background_color = 'FFFFFF';
+		}
+
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -815,8 +822,9 @@ class SimpleImage
 		}
 
 		// Create the new image and fill it with white
-		$new             = imagecreatetruecolor($size, $size);
-		$backgroundColor = imagecolorallocate($new, 255, 255, 255);
+		$new				= imagecreatetruecolor($size, $size);
+		$rgb				= $img->hex2rgb($background_color);
+		$backgroundColor	= imagecolorallocate($new, $rgb['r'], $rgb['g'], $rgb['b']);
 		imagefill($new, 0, 0, $backgroundColor);
 
 		if($white_background)
@@ -884,15 +892,32 @@ class SimpleImage
 
 	/**
 	 * @param     $src
-	 * @param int $quality
+	 * @param int $x
+	 * @param int $y
+	 * @return string
+	 */
+	public static function get_color_at_position($src, $x = 0, $y = 0)
+	{
+		$oImage = new SimpleImage();
+		list($rImage) = $oImage->load($src);
+
+		$iColor	= imagecolorat($rImage, $x, $y);
+
+		return Color::fromIntToHex($iColor, true);
+	}
+
+	/**
+	 * @param        $src
+	 * @param int    $quality
+	 * @param string $background_color
 	 * @return bool
 	 */
-	static function shrink_to_non_white($src, $quality = 100)
+	static function shrink_to_non_white($src, $quality = 100, $background_color = null)
 	{
 		$oImage = new SimpleImage();
 		list($rImage, $arrInfo) = $oImage->load($src);
 
-		$arrBox = SimpleImage::imageTrimBox($rImage);
+		$arrBox = SimpleImage::imageTrimBox($rImage, $background_color);
 
 		// Resize and crop
 		$rNewImage = imagecreatetruecolor($arrBox['w'], $arrBox['h']);
@@ -907,8 +932,8 @@ class SimpleImage
 	}
 
 	/**
-	 * @param      $rImage
-	 * @param null $hex
+	 * @param       $rImage
+	 * @param null  $hex
 	 * @return array
 	 */
 	static function imageTrimBox($rImage, $hex = null)

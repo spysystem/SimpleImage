@@ -980,7 +980,7 @@ class SimpleImage
 		$oImage				= new SimpleImage();
 		[$rImage, $arrInfo]	= $oImage->load($strSource);
 
-		$arrBox	= SimpleImage::imageTrimBox($rImage, $strBackgroundColor);
+		$arrBox	= SimpleImage::imageTrimBox($src, $strBackgroundColor);
 
 		// Resize and crop
 		$rNewImage	= imagecreatetruecolor($arrBox['w'], $arrBox['h']);
@@ -997,13 +997,16 @@ class SimpleImage
 	/**
 	 * Get trim box for image, used for shrinking to non-white
 	 *
-	 * @param resource        $rImage
+	 * @param resource        $src
 	 * @param string|int|null $mHexColor
 	 *
 	 * @return array
 	 */
-	public static function imageTrimBox($rImage, $mHexColor = null): array
+	public static function imageTrimBox($src, $mHexColor = null): array
 	{
+		$oImage = new SimpleImage();
+		list($rImage) = $oImage->load($src);
+
 		if(ctype_xdigit($mHexColor))
 		{
 			$iColor	= $mHexColor;

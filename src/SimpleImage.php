@@ -984,7 +984,7 @@ class SimpleImage
 			// left
 			for(; $b_lft < $w1; ++$b_lft)
 			{
-				for($y = $b_top; $y <= $b_btm; ++$y)
+				for($y = $b_top; $y < $b_btm; ++$y)
 				{
 					if(imagecolorat($rImage, $b_lft, $y) != $hex)
 					{
@@ -994,9 +994,9 @@ class SimpleImage
 			}
 
 			// right
-			for(; $b_rt >= 0; --$b_rt)
+			for(; $b_rt > 0; --$b_rt)
 			{
-				for($y = $b_top; $y <= $b_btm; ++$y)
+				for($y = $b_top; $y < $b_btm; ++$y)
 				{
 					if(imagecolorat($rImage, $b_rt - 1, $y) != $hex)
 					{

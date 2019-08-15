@@ -4,8 +4,10 @@
 	"license": "proprietary",
 	"require": {
 		"php": ">=5.6.0",
+		"ext-gd": "*",
+		"ext-ctype": "*",
 		"league/color-extractor": "0.3.*"
-	},
+    },
 	"autoload": {
 		"psr-4": {
 			"SpyClaviska\\": "src"

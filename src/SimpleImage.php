@@ -189,8 +189,8 @@ class SimpleImage
 
 
 	// Convert an image from one type to another; output type is determined by $dest's file extension
-
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $quality
@@ -229,6 +229,7 @@ class SimpleImage
 	// Flip an image horizontally or vertically
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $direction
@@ -272,6 +273,7 @@ class SimpleImage
 	// Rotate an image
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param int  $angle
@@ -315,6 +317,7 @@ class SimpleImage
 	// Convert an image from color to grayscale ("desaturate")
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $quality
@@ -335,6 +338,7 @@ class SimpleImage
 	// Invert image colors
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $quality
@@ -355,6 +359,7 @@ class SimpleImage
 	// Adjust image brightness
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $level
@@ -376,6 +381,7 @@ class SimpleImage
 	// Adjust image contrast
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $level
@@ -397,6 +403,7 @@ class SimpleImage
 	// Colorize an image (requires PHP 5.2.5+)
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $red
@@ -421,6 +428,7 @@ class SimpleImage
 	// Highlight image edges
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $quality
@@ -441,6 +449,7 @@ class SimpleImage
 	// Emboss an image
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $quality
@@ -461,6 +470,7 @@ class SimpleImage
 	// Blur an image
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param int  $level
@@ -485,6 +495,7 @@ class SimpleImage
 	// Create a sketch effect
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param int  $level
@@ -509,6 +520,7 @@ class SimpleImage
 	// Make image smoother
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $level
@@ -530,6 +542,7 @@ class SimpleImage
 	// Make image pixelized (requires PHP 5.3+)
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $block_size
@@ -552,6 +565,7 @@ class SimpleImage
 	// Produce a sepia-like effect
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $quality
@@ -573,6 +587,7 @@ class SimpleImage
 	// Resize an image to the specified dimensions
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $new_width
@@ -609,6 +624,7 @@ class SimpleImage
 	// Proportionally scale an image to fit the specified width
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $new_width
@@ -650,6 +666,7 @@ class SimpleImage
 	// Proportionally scale an image to fit the specified height
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $new_height
@@ -706,6 +723,7 @@ class SimpleImage
 	/**
 	 * Proportionally shrink an image to fit within a specified width/height
 	 *
+	 * @noinspection PhpUnused
 	 * @param           $src
 	 * @param           $dest
 	 * @param           $max_width
@@ -876,6 +894,7 @@ class SimpleImage
 	}
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $size
@@ -891,6 +910,7 @@ class SimpleImage
 	}
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param     $src
 	 * @param int $x
 	 * @param int $y
@@ -970,7 +990,7 @@ class SimpleImage
 			}
 
 			// bottom
-			for(; $b_btm >= 0; --$b_btm)
+			for(; $b_btm > 0; --$b_btm)
 			{
 				for($x = 0; $x < $w1; ++$x)
 				{
@@ -1031,6 +1051,7 @@ class SimpleImage
 	// Crop an image and optionally resize the resulting piece
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param      $x1
@@ -1093,6 +1114,7 @@ class SimpleImage
 	// Trim the edges of a portrait or landscape image to make it square and optionally resize the resulting image
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param      $src
 	 * @param      $dest
 	 * @param null $new_size
@@ -1142,6 +1164,7 @@ class SimpleImage
 	// Overlay an image on top of another image with opacity; works with 24-big PNG alpha-transparency
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param        $src
 	 * @param        $dest
 	 * @param        $watermark_src
@@ -1229,6 +1252,7 @@ class SimpleImage
 	// Adds text on top of an image with optional shadow
 
 	/**
+	 * @noinspection PhpUnused
 	 * @param        $src
 	 * @param        $dest
 	 * @param        $text
@@ -1243,7 +1267,7 @@ class SimpleImage
 	 * @param null   $quality
 	 * @return bool
 	 */
-	static function text($src, $dest, $text, $font_file, $size = 12, $color = '#000000', $position = 'center', $margin = 0, $shadow_color = null, $shadow_offset_x, $shadow_offset_y, $quality = null)
+	static function text($src, $dest, $text, $font_file, $size = 12, $color = '#000000', $position = 'center', $margin = 0, $shadow_color = null, $shadow_offset_x = 0, $shadow_offset_y = 0, $quality = null)
 	{
 
 		// This method could be improved to support the text angle
@@ -1341,7 +1365,6 @@ class SimpleImage
 // Require GD library
 if(!extension_loaded('gd'))
 {
+	/** @noinspection PhpUnhandledExceptionInspection */
 	throw new Exception('Required extension GD is not loaded.');
 }
-
-?>

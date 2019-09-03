@@ -1,35 +1,32 @@
 <?php
+/**
+ * The PHP Simple Image class - v1.0
+ *  By Cory LaViska - http://abeautifulsite.net/
+ *
+ * License
+ *  This software is dual-licensed under the GNU General Public License and
+ *  the MIT License and is copyright A Beautiful Site, LLC.
+ */
 namespace SpyClaviska;
 
-/*
-
-  The PHP Simple Image class - v1.0
-
-    By Cory LaViska - http://abeautifulsite.net/
-
-  License
-
-    This software is dual-licensed under the GNU General Public License and
-    the MIT License and is copyright A Beautiful Site, LLC.
-
-*/
-
-use Exception;
 use League\ColorExtractor\Color;
 
 /**
- * Class SpyClaviska\SimpleImage
+ * Class SimpleImage
+ *
+ * @package SpyClaviska
  */
 class SimpleImage
 {
-	// Loads an image into a resource variable and gets the appropriate image information
 	/**
-	 * @param $src
-	 * @return array|bool
+	 * Loads an image into a resource variable and gets the appropriate image information
+	 *
+	 * @param string $src
+	 *
+	 * @return mixed[]|bool
 	 */
-	private function load($src)
+	private function load(string $src)
 	{
-
 		$info = getimagesize($src);
 		if(!$info)
 		{
@@ -38,7 +35,6 @@ class SimpleImage
 
 		switch($info['mime'])
 		{
-
 			case 'image/gif':
 				$image = imagecreatefromgif($src);
 				break;
@@ -66,21 +62,20 @@ class SimpleImage
 	 * @param resource $image
 	 * @param string   $filename
 	 * @param string   $type
-	 * @param int      $quality
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	private function save($image, $filename, $type, $quality = null)
+	private function save($image, string $filename, string $type, ?int $quality = null): bool
 	{
-
 		switch($type)
 		{
-
 			case 'image/gif':
 				return imagegif($image, $filename);
 				break;
 
 			case 'image/jpeg':
-				if($quality == null)
+				if($quality === null)
 				{
 					$quality = 85;
 				}
@@ -97,7 +92,7 @@ class SimpleImage
 				break;
 
 			case 'image/png':
-				if($quality == null)
+				if($quality === null)
 				{
 					$quality = 9;
 				}
@@ -112,32 +107,28 @@ class SimpleImage
 
 				return imagepng($image, $filename, $quality);
 				break;
-
-			default:
-				// Unsupported image type
-				return false;
-				break;
 		}
+
+		return false;
 	}
 
-
-	// Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs
-
 	/**
-	 * @param $dst_im
-	 * @param $src_im
-	 * @param $dst_x
-	 * @param $dst_y
-	 * @param $src_x
-	 * @param $src_y
-	 * @param $src_w
-	 * @param $src_h
-	 * @param $pct
+	 * Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs
+	 *
+	 * @param resource $dst_im
+	 * @param resource $src_im
+	 * @param int      $dst_x
+	 * @param int      $dst_y
+	 * @param int      $src_x
+	 * @param int      $src_y
+	 * @param int      $src_w
+	 * @param int      $src_h
+	 * @param int      $pct
+	 *
 	 * @return bool
 	 */
-	private function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
+	private function imagecopymerge_alpha($dst_im, $src_im, int $dst_x, int $dst_y, int $src_x, int $src_y, int $src_w, int $src_h, int $pct): bool
 	{
-
 		$cut = imagecreatetruecolor($src_w, $src_h);
 		imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
 		imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
@@ -145,20 +136,20 @@ class SimpleImage
 		return imagecopymerge($dst_im, $cut, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct);
 	}
 
-
-	// Converts a hex color value to its RGB equivalent
-
 	/**
-	 * @param $hex_color
+	 * Converts a hex color value to its RGB equivalent
+	 *
+	 * @param string $hex_color
+	 *
 	 * @return array|bool
 	 */
-	private function hex2rgb($hex_color)
+	private function hex2rgb(string $hex_color)
 	{
-
 		if($hex_color[0] == '#')
 		{
 			$hex_color = substr($hex_color, 1);
 		}
+
 		if(strlen($hex_color) == 6)
 		{
 			list($r, $g, $b) = [
@@ -187,24 +178,22 @@ class SimpleImage
 		];
 	}
 
-
-	// Convert an image from one type to another; output type is determined by $dest's file extension
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $quality
+	 * Convert an image from one type to another; output type is determined by $dest's file extension
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function convert($src, $dest, $quality = null)
+	public static function convert(string $src, string $dest, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original) = $img->load($src);
 
 		switch(strtolower(preg_replace('/^.*\./', '', $dest)))
 		{
-
 			case 'gif':
 				return $img->save($original, $dest, 'image/gif');
 				break;
@@ -217,28 +206,23 @@ class SimpleImage
 			case 'png':
 				return $img->save($original, $dest, 'image/png', $quality);
 				break;
-
-			default:
-				// Unsupported image type
-				return false;
-				break;
 		}
+
+		return false;
 	}
 
-
-	// Flip an image horizontally or vertically
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $direction
-	 * @param null $quality
+	 * Flip an image horizontally or vertically
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param string   $direction
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function flip($src, $dest, $direction, $quality = null)
+	public static function flip(string $src, string $dest, string $direction, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -246,9 +230,8 @@ class SimpleImage
 
 		switch(strtolower($direction))
 		{
-
-			case 'v':
 			case 'vertical':
+			case 'v':
 			case 'y':
 				for($y = 0; $y < $info[1]; $y++)
 				{
@@ -256,8 +239,8 @@ class SimpleImage
 				}
 				break;
 
-			case 'h':
 			case 'horizontal':
+			case 'h':
 			case 'x':
 				for($x = 0; $x < $info[0]; $x++)
 				{
@@ -269,31 +252,29 @@ class SimpleImage
 		return $img->save($new, $dest, $info['mime'], $quality);
 	}
 
-
-	// Rotate an image
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param int  $angle
-	 * @param int  $bg_color
-	 * @param null $quality
+	 * Rotate an image
+	 *
+	 * @param string     $src
+	 * @param string     $dest
+	 * @param int|string $angle
+	 * @param string     $bg_color
+	 * @param int|null   $quality
+	 *
 	 * @return bool
 	 */
-	static function rotate($src, $dest, $angle = 270, $bg_color = 0, $quality = null)
+	public static function rotate(string $src, string $dest, $angle = 270, string $bg_color = '#FFFFFF', ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
 		// Determine angle
 		$angle = strtolower($angle);
-		if($angle == 'cw' || $angle == 'clockwise')
+		if($angle === 'cw' || $angle === 'clockwise')
 		{
 			$angle = 270;
 		}
-		if($angle == 'ccw' || $angle == 'counterclockwise')
+		if($angle === 'ccw' || $angle === 'counterclockwise')
 		{
 			$angle = 90;
 		}
@@ -303,8 +284,13 @@ class SimpleImage
 
 		$new = imagerotate($original, $angle, $bg_color);
 
+		/**
+		 * Suppress the warning: tempnam(): file created in the system's temporary directory
+		 * @see https://www.php.net/ChangeLog-7.php#7.1.0
+		 *      Fixed bug #69489 (tempnam() should raise notice if falling back to temp dir).
+		 */
+		$desttmp  = @tempnam('/tmp', 'img-rotate');
 		$bSuccess = false;
-		$desttmp  = tempnam('/tmp', 'img-rotate');
 		if($img->save($new, $desttmp, $info['mime'], $quality))
 		{
 			$bSuccess = rename($desttmp, $dest);
@@ -313,19 +299,17 @@ class SimpleImage
 		return $bSuccess;
 	}
 
-
-	// Convert an image from color to grayscale ("desaturate")
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $quality
+	 * Convert an image from color to grayscale ("desaturate")
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function grayscale($src, $dest, $quality = null)
+	public static function grayscale(string $src, string $dest, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -334,19 +318,17 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Invert image colors
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $quality
+	 * Invert image colors
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function invert($src, $dest, $quality = null)
+	public static function invert(string $src, string $dest, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -355,20 +337,18 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Adjust image brightness
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $level
-	 * @param null $quality
+	 * Adjust image brightness
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $level
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function brightness($src, $dest, $level, $quality = null)
+	public static function brightness(string $src, string $dest, int $level, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -377,20 +357,18 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Adjust image contrast
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $level
-	 * @param null $quality
+	 * Adjust image contrast
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $level
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function contrast($src, $dest, $level, $quality = null)
+	public static function contrast(string $src, string $dest, int $level, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -399,23 +377,21 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Colorize an image (requires PHP 5.2.5+)
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $red
-	 * @param      $green
-	 * @param      $blue
-	 * @param      $alpha
-	 * @param null $quality
+	 * Colorize an image (requires PHP 5.2.5+)
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $red
+	 * @param int      $green
+	 * @param int      $blue
+	 * @param int      $alpha
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function colorize($src, $dest, $red, $green, $blue, $alpha, $quality = null)
+	public static function colorize(string $src, string $dest, int $red, int $green, int $blue, int $alpha, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -424,19 +400,17 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Highlight image edges
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $quality
+	 * Highlight image edges
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function edgedetect($src, $dest, $quality = null)
+	public static function edgedetect(string $src, string $dest, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -445,19 +419,17 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Emboss an image
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $quality
+	 * Emboss an image
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function emboss($src, $dest, $quality = null)
+	public static function emboss(string $src, string $dest, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -466,20 +438,18 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Blur an image
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param int  $level
-	 * @param null $quality
+	 * Blur an image
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $level
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function blur($src, $dest, $level = 1, $quality = null)
+	public static function blur(string $src, string $dest, int $level = 1, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -491,20 +461,18 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Create a sketch effect
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param int  $level
-	 * @param null $quality
+	 * Create a sketch effect
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $level
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function sketch($src, $dest, $level = 1, $quality = null)
+	public static function sketch(string $src, string $dest, int $level = 1, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -516,20 +484,18 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Make image smoother
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $level
-	 * @param null $quality
+	 * Make image smoother
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $level
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function smooth($src, $dest, $level, $quality = null)
+	public static function smooth(string $src, string $dest, int $level, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -538,21 +504,19 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Make image pixelized (requires PHP 5.3+)
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $block_size
-	 * @param bool $advanced_pix
-	 * @param null $quality
+	 * Make image pixelized (requires PHP 5.3+)
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $block_size
+	 * @param bool     $advanced_pix
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function pixelate($src, $dest, $block_size, $advanced_pix = false, $quality = null)
+	public static function pixelate(string $src, string $dest, int $block_size, bool $advanced_pix = false, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -561,19 +525,17 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Produce a sepia-like effect
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $quality
+	 * Produce a sepia-like effect
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function sepia($src, $dest, $quality = null)
+	public static function sepia(string $src, string $dest, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -583,22 +545,20 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Resize an image to the specified dimensions
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $new_width
-	 * @param      $new_height
-	 * @param bool $resample
-	 * @param null $quality
+	 * Resize an image to the specified dimensions
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $new_width
+	 * @param int      $new_height
+	 * @param bool     $resample
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function resize($src, $dest, $new_width, $new_height, $resample = true, $quality = null)
+	public static function resize(string $src, string $dest, int $new_width, int $new_height, bool $resample = true, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -620,21 +580,19 @@ class SimpleImage
 		return $img->save($new, $dest, $info['mime'], $quality);
 	}
 
-
-	// Proportionally scale an image to fit the specified width
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $new_width
-	 * @param bool $resample
-	 * @param null $quality
+	 * Proportionally scale an image to fit the specified width
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $new_width
+	 * @param bool     $resample
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function resize_to_width($src, $dest, $new_width, $resample = true, $quality = null)
+	public static function resize_to_width(string $src, string $dest, int $new_width, bool $resample = true, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -662,23 +620,21 @@ class SimpleImage
 		return $img->save($new, $dest, $info['mime'], $quality);
 	}
 
-
-	// Proportionally scale an image to fit the specified height
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $new_height
-	 * @param bool $resample
-	 * @param null $quality
-	 * @param null $new_type
-	 * @param bool $white_background
+	 * Proportionally scale an image to fit the specified height
+	 *
+	 * @param string      $src
+	 * @param string      $dest
+	 * @param int         $new_height
+	 * @param bool        $resample
+	 * @param int|null    $quality
+	 * @param string|null $new_type
+	 * @param bool        $white_background
+	 *
 	 * @return bool
 	 */
-	static function resize_to_height($src, $dest, $new_height, $resample = true, $quality = null, $new_type = null, $white_background = false)
+	public static function resize_to_height(string $src, string $dest, int $new_height, bool $resample = true, ?int $quality = null, ?string $new_type = null, bool $white_background = false): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -723,20 +679,19 @@ class SimpleImage
 	/**
 	 * Proportionally shrink an image to fit within a specified width/height
 	 *
-	 * @noinspection PhpUnused
-	 * @param           $src
-	 * @param           $dest
-	 * @param           $max_width
-	 * @param           $max_height
-	 * @param bool|true $resample
-	 * @param null      $quality
-	 * @param null      $new_type E.g. image/jpeg or image/png
-	 * @param bool      $white_background
+	 * @param string      $src
+	 * @param string      $dest
+	 * @param int         $max_width
+	 * @param int         $max_height
+	 * @param bool        $resample
+	 * @param int|null    $quality
+	 * @param string|null $new_type
+	 * @param bool        $white_background
+	 *
 	 * @return bool
 	 */
-	static function shrink_to_fit($src, $dest, $max_width, $max_height, $resample = true, $quality = null, $new_type = null, $white_background = false)
+	public static function shrink_to_fit(string $src, string $dest, int $max_width, int $max_height, bool $resample = true, ?int $quality = null, ?string $new_type = null, bool $white_background = false): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -793,21 +748,21 @@ class SimpleImage
 		return $img->save($new, $dest, $info['mime'], $quality);
 	}
 
-
-	// Proportionally shrink an image to fit within a specified width/height
-
 	/**
-	 * @param        $src
-	 * @param        $dest
-	 * @param        $size
-	 * @param bool   $resample
-	 * @param null   $quality
-	 * @param null   $new_type
-	 * @param bool   $white_background
-	 * @param string $background_color
+	 * Proportionally shrink an image to fit within a specified width/height
+	 *
+	 * @param string      $src
+	 * @param string      $dest
+	 * @param int         $size
+	 * @param bool        $resample
+	 * @param int|null    $quality
+	 * @param string|null $new_type
+	 * @param bool        $white_background
+	 * @param string|null $background_color
+	 *
 	 * @return bool
 	 */
-	static function shrink_to_square($src, $dest, $size, $resample = true, $quality = null, $new_type = null, $white_background = false, $background_color = null)
+	public static function shrink_to_square(string $src, string $dest, int $size, bool $resample = true, ?int $quality = null, ?string $new_type = null, bool $white_background = false, ?string $background_color = null): bool
 	{
 		if($background_color === null)
 		{
@@ -894,15 +849,17 @@ class SimpleImage
 	}
 
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $size
-	 * @param bool $resample
-	 * @param null $quality
+	 * Shrink source image to non-white, and then shrink to square and save to destination
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $size
+	 * @param bool     $resample
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function shrink_to_square_non_white($src, $dest, $size, $resample = true, $quality = null)
+	public static function shrink_to_square_non_white(string $src, string $dest, int $size, bool $resample = true, ?int $quality = null): bool
 	{
 		SimpleImage::shrink_to_non_white($src);
 
@@ -910,13 +867,15 @@ class SimpleImage
 	}
 
 	/**
-	 * @noinspection PhpUnused
-	 * @param     $src
-	 * @param int $x
-	 * @param int $y
+	 * Get HEX color for specified position in image
+	 *
+	 * @param string $src
+	 * @param int    $x
+	 * @param int    $y
+	 *
 	 * @return string
 	 */
-	public static function get_color_at_position($src, $x = 0, $y = 0)
+	public static function get_color_at_position(string $src, int $x = 0, int $y = 0): string
 	{
 		$oImage = new SimpleImage();
 		list($rImage) = $oImage->load($src);
@@ -927,12 +886,15 @@ class SimpleImage
 	}
 
 	/**
-	 * @param        $src
-	 * @param int    $quality
-	 * @param string $background_color
+	 * Shrink image to non-white, ie. remove white borders arround the actual image
+	 *
+	 * @param string      $src
+	 * @param int|null    $quality
+	 * @param string|null $background_color
+	 *
 	 * @return bool
 	 */
-	static function shrink_to_non_white($src, $quality = 100, $background_color = null)
+	public static function shrink_to_non_white(string $src, ?int $quality = 100, ?string $background_color = null): bool
 	{
 		$oImage = new SimpleImage();
 		list($rImage, $arrInfo) = $oImage->load($src);
@@ -952,11 +914,14 @@ class SimpleImage
 	}
 
 	/**
-	 * @param       $rImage
-	 * @param null  $hex
+	 * Get trim box for image, used for shrinking to non-white
+	 *
+	 * @param resource    $rImage
+	 * @param string|null $hex
+	 *
 	 * @return array
 	 */
-	static function imageTrimBox($rImage, $hex = null)
+	public static function imageTrimBox($rImage, ?string $hex = null): array
 	{
 		if(!ctype_xdigit($hex))
 		{
@@ -1031,7 +996,7 @@ class SimpleImage
 		}
 		while(0);
 
-		// result codes:
+		// Result codes:
 		// 0 = Trim Zero Pixels
 		// 1 = Trim Some Pixels
 		// 2 = Trim All Pixels
@@ -1048,25 +1013,24 @@ class SimpleImage
 		];
 	}
 
-	// Crop an image and optionally resize the resulting piece
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param      $x1
-	 * @param      $y1
-	 * @param      $x2
-	 * @param      $y2
-	 * @param null $new_width
-	 * @param null $new_height
-	 * @param bool $resample
-	 * @param null $quality
+	 * Crop an image and optionally resize the resulting piece
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int      $x1
+	 * @param int      $y1
+	 * @param int      $x2
+	 * @param int      $y2
+	 * @param int|null $new_width
+	 * @param int|null $new_height
+	 * @param bool     $resample
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function crop($src, $dest, $x1, $y1, $x2, $y2, $new_width = null, $new_height = null, $resample = true, $quality = null)
+	public static function crop(string $src, string $dest, int $x1, int $y1, int $x2, int $y2, ?int $new_width = null, ?int $new_height = null, bool $resample = true, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -1110,20 +1074,18 @@ class SimpleImage
 		return $img->save($new, $dest, $info['mime'], $quality);
 	}
 
-
-	// Trim the edges of a portrait or landscape image to make it square and optionally resize the resulting image
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param      $src
-	 * @param      $dest
-	 * @param null $new_size
-	 * @param null $quality
+	 * Trim the edges of a portrait or landscape image to make it square and optionally resize the resulting image
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param int|null $new_size
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function square_crop($src, $dest, $new_size = null, $quality = null)
+	public static function square_crop(string $src, string $dest, ?int $new_size = null, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 
@@ -1160,30 +1122,27 @@ class SimpleImage
 		return $img->save($new, $dest, $info['mime'], $quality);
 	}
 
-
-	// Overlay an image on top of another image with opacity; works with 24-big PNG alpha-transparency
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param        $src
-	 * @param        $dest
-	 * @param        $watermark_src
-	 * @param string $position
-	 * @param int    $opacity
-	 * @param int    $margin
-	 * @param null   $quality
+	 * Overlay an image on top of another image with opacity; works with 24-bit PNG alpha-transparency
+	 *
+	 * @param string   $src
+	 * @param string   $dest
+	 * @param string   $watermark_src
+	 * @param string   $position
+	 * @param int      $opacity
+	 * @param int      $margin
+	 * @param int|null $quality
+	 *
 	 * @return bool
 	 */
-	static function watermark($src, $dest, $watermark_src, $position = 'center', $opacity = 50, $margin = 0, $quality = null)
+	public static function watermark(string $src, string $dest, string $watermark_src, string $position = 'center', int $opacity = 50, int $margin = 0, ?int $quality = null): bool
 	{
-
 		$img = new SimpleImage;
 		list($original, $info) = $img->load($src);
 		list($watermark, $watermark_info) = $img->load($watermark_src);
 
 		switch(strtolower($position))
 		{
-
 			case 'top-left':
 			case 'left-top':
 				$x = 0 + $margin;
@@ -1248,28 +1207,26 @@ class SimpleImage
 		return $img->save($original, $dest, $info['mime'], $quality);
 	}
 
-
-	// Adds text on top of an image with optional shadow
-
 	/**
-	 * @noinspection PhpUnused
-	 * @param        $src
-	 * @param        $dest
-	 * @param        $text
-	 * @param        $font_file
-	 * @param int    $size
-	 * @param string $color
-	 * @param string $position
-	 * @param int    $margin
-	 * @param null   $shadow_color
-	 * @param        $shadow_offset_x
-	 * @param        $shadow_offset_y
-	 * @param null   $quality
+	 * Adds text on top of an image with optional shadow
+	 *
+	 * @param string      $src
+	 * @param string      $dest
+	 * @param string      $text
+	 * @param string      $font_file
+	 * @param int         $size
+	 * @param string      $color
+	 * @param string      $position
+	 * @param int         $margin
+	 * @param string|null $shadow_color
+	 * @param int         $shadow_offset_x
+	 * @param int         $shadow_offset_y
+	 * @param int|null    $quality
+	 *
 	 * @return bool
 	 */
-	static function text($src, $dest, $text, $font_file, $size = 12, $color = '#000000', $position = 'center', $margin = 0, $shadow_color = null, $shadow_offset_x = 0, $shadow_offset_y = 0, $quality = null)
+	public static function text(string $src, string $dest, string $text, string $font_file, int $size = 12, string $color = '#000000', string $position = 'center', int $margin = 0, ?string $shadow_color = null, int $shadow_offset_x = 0, int $shadow_offset_y = 0, ?int $quality = null): bool
 	{
-
 		// This method could be improved to support the text angle
 		$angle = 0;
 
@@ -1289,7 +1246,6 @@ class SimpleImage
 
 		switch(strtolower($position))
 		{
-
 			case 'top-left':
 			case 'left-top':
 				$x = 0 + $margin;

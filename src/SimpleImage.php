@@ -811,7 +811,147 @@ class SimpleImage
 	}
 
 	/**
-	 * Proportionally shrink an image to fit within a specified width/height
+	 * Proportionally shrink an image to fit within a specified width and height (adding whitespace if needed)
+	 *
+	 * @param string      $strSource
+	 * @param string      $strDestination
+	 * @param int         $iWidth
+	 * @param int         $iHeight
+	 * @param bool        $bResample
+	 * @param int|null    $iQuality
+	 * @param string|null $strNewType
+	 * @param bool        $bWhiteBackground
+	 * @param string|null $strBackgroundColor
+	 *
+	 * @return bool
+	 */
+	public static function shrinkToSize(
+		string	$strSource,
+		string	$strDestination,
+		int		$iWidth,
+		int		$iHeight,
+		bool	$bResample			= true,
+		?int	$iQuality			= null,
+		?string	$strNewType			= null,
+		bool	$bWhiteBackground	= false,
+		?string	$strBackgroundColor	= null
+	): bool
+	{
+		if($strBackgroundColor === null)
+		{
+			$strBackgroundColor	= 'FFFFFF';
+		}
+
+		$oImage					= new SimpleImage;
+		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+
+		// Get image size and determine aspect ratio
+		[$iImageWidth, $iImageHeight]	= $arrInfo;
+		$fImageAspectRatio				= $iImageHeight / $iImageWidth;
+
+		// Make width fit into new dimensions
+		if($iImageWidth > $iWidth)
+		{
+			$iNewWidth	= $iWidth;
+			$iNewHeight	= $iNewWidth * $fImageAspectRatio;
+		}
+		else
+		{
+			$iNewWidth	= $iImageWidth;
+			$iNewHeight	= $iImageHeight;
+		}
+
+		// Make height fit into new dimensions
+		if($iNewHeight > $iHeight)
+		{
+			$iNewHeight	= $iHeight;
+			$iNewWidth	= $iNewHeight / $fImageAspectRatio;
+		}
+
+		// Create the new image and fill it with background color
+		$rNew				= imagecreatetruecolor($iWidth, $iHeight);
+		$arrRgb				= $oImage->hex2rgb($strBackgroundColor);
+		$iBackgroundColor	= imagecolorallocate($rNew, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
+		imagefill($rNew, 0, 0, $iBackgroundColor);
+
+		if($bWhiteBackground)
+		{
+			// Make the standard background for transparent images WHITE instead of BLACK (e.g. when you convert from png to jpeg).
+			imagefilledrectangle(
+				$rNew,
+				0,
+				0,
+				$iNewWidth,
+				$iNewHeight,
+				imagecolorallocate($rNew, 255, 255, 255)
+			);
+		}
+		else
+		{
+			// Preserve alphatransparency in PNGs
+			imagealphablending($rNew, false);
+			imagesavealpha($rNew, true);
+		}
+
+		$arrPos	= [0, 0];
+
+		// Find the new pos for the image
+		if($iHeight > $iNewHeight)
+		{
+			$arrPos[1]	= ($iHeight - $iNewHeight) / 2;
+		}
+		elseif($iWidth > $iNewWidth)
+		{
+			$arrPos[0]	= ($iWidth - $iNewWidth) / 2;
+		}
+
+		if($iImageWidth < $iWidth && $iImageHeight < $iHeight)
+		{
+			$arrPos[0]	= ($iWidth - $iImageWidth) / 2;
+		}
+
+		if($bResample)
+		{
+			imagecopyresampled(
+				$rNew,
+				$rOriginal,
+				$arrPos[0],
+				$arrPos[1],
+				0,
+				0,
+				$iNewWidth,
+				$iNewHeight,
+				$iImageWidth,
+				$iImageHeight
+			);
+		}
+		else
+		{
+			imagecopyresized(
+				$rNew,
+				$rOriginal,
+				$arrPos[0],
+				$arrPos[1],
+				0,
+				0,
+				$iNewWidth,
+				$iNewHeight,
+				$iImageWidth,
+				$iImageHeight
+			);
+		}
+
+		// Override mimetype (say you want to convert 'image/png' to 'image/jpeg'
+		if($strNewType)
+		{
+			$arrInfo['mime']	= $strNewType;
+		}
+
+		return $oImage->save($rNew, $strDestination, $arrInfo['mime'], $iQuality);
+	}
+
+	/**
+	 * Proportionally shrink an image to fit within a specified squared size
 	 *
 	 * @param string      $strSource
 	 * @param string      $strDestination
@@ -835,88 +975,7 @@ class SimpleImage
 		?string	$strBackgroundColor	= null
 	): bool
 	{
-		if($strBackgroundColor === null)
-		{
-			$strBackgroundColor	= 'FFFFFF';
-		}
-
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
-
-		// Determine aspect ratio
-		$fAspectRatio	= $arrInfo[1] / $arrInfo[0];
-
-		// Make width fit into new dimensions
-		if($arrInfo[0] > $iSize)
-		{
-			$iNewWidth	= $iSize;
-			$iNewHeight	= $iNewWidth * $fAspectRatio;
-		}
-		else
-		{
-			$iNewWidth	= $arrInfo[0];
-			$iNewHeight	= $arrInfo[1];
-		}
-
-		// Make height fit into new dimensions
-		if($iNewHeight > $iSize)
-		{
-			$iNewHeight	= $iSize;
-			$iNewWidth	= $iNewHeight / $fAspectRatio;
-		}
-
-		// Create the new image and fill it with white
-		$rNew				= imagecreatetruecolor($iSize, $iSize);
-		$arrRgb				= $oImage->hex2rgb($strBackgroundColor);
-		$iBackgroundColor	= imagecolorallocate($rNew, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
-		imagefill($rNew, 0, 0, $iBackgroundColor);
-
-		if($bWhiteBackground)
-		{
-			// Make the standard background for transparent images WHITE instead of BLACK (e.g. when you convert from png to jpeg).
-			$iWhite	= imagecolorallocate($rNew, 255, 255, 255);
-			imagefilledrectangle($rNew, 0, 0, $iNewWidth, $iNewHeight, $iWhite);
-		}
-		else
-		{
-			// Preserve alphatransparency in PNGs
-			imagealphablending($rNew, false);
-			imagesavealpha($rNew, true);
-		}
-
-		$arrPos	= [0, 0];
-
-		// Find the new pos for the image
-		if($iSize > $iNewHeight)
-		{
-			$arrPos[1]	= ($iSize - $iNewHeight) / 2;
-		}
-		elseif($iSize > $iNewWidth)
-		{
-			$arrPos[0]	= ($iSize - $iNewWidth) / 2;
-		}
-
-		if($arrInfo[0] < $iSize && $arrInfo[1] < $iSize)
-		{
-			$arrPos[0]	= ($iSize - $arrInfo[0]) / 2;
-		}
-
-		if($bResample)
-		{
-			imagecopyresampled($rNew, $rOriginal, $arrPos[0], $arrPos[1], 0, 0, $iNewWidth, $iNewHeight, $arrInfo[0], $arrInfo[1]);
-		}
-		else
-		{
-			imagecopyresized($rNew, $rOriginal, $arrPos[0], $arrPos[1], 0, 0, $iNewWidth, $iNewHeight, $arrInfo[0], $arrInfo[1]);
-		}
-
-		// Override mimetype (say you want to convert 'image/png' to 'image/jpeg'
-		if($strNewType)
-		{
-			$arrInfo['mime']	= $strNewType;
-		}
-
-		return $oImage->save($rNew, $strDestination, $arrInfo['mime'], $iQuality);
+		return SimpleImage::shrinkToSize($strSource, $strDestination, $iSize, $iSize, $bResample, $iQuality, $strNewType, $bWhiteBackground, $strBackgroundColor);
 	}
 
 	/**

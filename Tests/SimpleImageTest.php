@@ -1,5 +1,5 @@
 <?php
-namespace SpyClaviska\Test;
+namespace SpyClaviska\Tests;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -8,7 +8,7 @@ use SpyClaviska\SimpleImage;
 /**
  * Class SimpleImageTest
  *
- * @package Spy\FileManager
+ * @package SpyClaviska\Tests
  */
 class SimpleImageTest extends TestCase
 {
@@ -119,10 +119,10 @@ class SimpleImageTest extends TestCase
 		for($iCount = 0; $iCount <= 5; $iCount++)
 		{
 			$iColor	= imagecolorallocate($rImage, rand(0, 255), rand(0, 255), rand(0, 255));
-			$iX1	= rand(0, 99);
-			$iY1	= rand(0, 99);
-			$iX2	= rand($iX1, 100);
-			$iY2	= rand($iY1, 100);
+			$iX1	= rand(5, $iWidth / 2);
+			$iY1	= rand(5, $iHeight / 2);
+			$iX2	= rand($iX1, $iWidth - 5);
+			$iY2	= rand($iY1, $iHeight - 5);
 			imagefilledrectangle($rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
 		}
 
@@ -291,6 +291,52 @@ class SimpleImageTest extends TestCase
 		}
 	}
 
+	/**
+	 * @param string $strExpectedHexColor
+	 * @param string $strActualHexColor
+	 * @param int    $iTolerance
+	 */
+	private static function AssertSimilarColor(string $strExpectedHexColor, string $strActualHexColor, int $iTolerance = 35): void
+	{
+		$strExpectedHex	= ltrim($strExpectedHexColor, '#');
+		$strActualHex	= ltrim($strActualHexColor, '#');
+
+		$arrExpectedRGB = [
+			'r'	=> hexdec(substr($strExpectedHex, 0, 2)),
+			'g'	=> hexdec(substr($strExpectedHex, 2, 2)),
+			'b'	=> hexdec(substr($strExpectedHex, 4, 2)),
+		];
+		$arrActualRGB = [
+			'r'	=> hexdec(substr($strActualHex, 0, 2)),
+			'g'	=> hexdec(substr($strActualHex, 2, 2)),
+			'b'	=> hexdec(substr($strActualHex, 4, 2)),
+		];
+
+		$bIsSimilar	=
+			(
+				$arrExpectedRGB['r'] >= $arrActualRGB['r'] - $iTolerance
+			 &&	$arrExpectedRGB['r'] <= $arrActualRGB['r'] + $iTolerance
+			)
+		 &&	(
+		 		$arrExpectedRGB['g'] >= $arrActualRGB['g'] - $iTolerance
+			 &&	$arrExpectedRGB['g'] <= $arrActualRGB['g'] + $iTolerance
+			)
+		 &&	(
+		 		$arrExpectedRGB['b'] >= $arrActualRGB['b'] - $iTolerance
+			 &&	$arrExpectedRGB['b'] <= $arrActualRGB['b'] + $iTolerance
+			)
+		;
+
+		if(!$bIsSimilar)
+		{
+			self::fail(<<<MSG
+			Failed asserting that two colors are similar
+			Expected : {$strExpectedHexColor}
+			Actual   : {$strActualHexColor}
+			MSG);
+		}
+	}
+
 	public function testQuality(): void
 	{
 		$strSourceFilePath		= './test.jpg';
@@ -311,7 +357,7 @@ class SimpleImageTest extends TestCase
 
 		foreach($arrData as $iQuality => $iExpected)
 		{
-			self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 0, 0, $iQuality));
+			self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 0, '#FFFFFF', $iQuality));
 			self::assertEquals($iExpected, self::GetImageQuality($strDestinationFilePath));
 		}
 
@@ -400,25 +446,25 @@ class SimpleImageTest extends TestCase
 		$strDestinationFilePath	= './test-rotate.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 45, 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 45, '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 45, 0);
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 90, 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 90, '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 90, 0);
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 180, 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 180, '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 180, 0);
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 270, 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 270, '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 270, 0);
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 360, 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 360, '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 360, 0);
 
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'clockwise', 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'clockwise', '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 270, 0);
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'cw', 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'cw', '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 270, 0);
 
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'counterclockwise', 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'counterclockwise', '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 90, 0);
-		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'ccw', 0));
+		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 'ccw', '#000000'));
 		self::AssertImageRotated($strSourceFilePath, $strDestinationFilePath, 90, 0);
 
 		unlink($strSourceFilePath);
@@ -787,29 +833,166 @@ class SimpleImageTest extends TestCase
 		unlink($strDestinationFilePath);
 	}
 
+	public function testShrinkToSize(): void
+	{
+		$strSourceFilePath		= './test.jpg';
+		$strDestinationFilePath	= './test-shrink-to-size.jpg';
+
+		$arrGenerateImageSizes	= [
+			// Landscape
+			[300, 150],
+			// Portrait
+			[300, 450],
+			// Square
+			[300, 300],
+		];
+
+		$arrShrinkToSizes	= [
+			// Landscape
+			[100, 50],
+			[200, 100],
+			[300, 150],
+			[400, 200],
+			[500, 250],
+			// Portrait
+			[100, 150],
+			[200, 300],
+			[300, 450],
+			[400, 600],
+			[500, 750],
+			// Square
+			[100, 100],
+			[200, 200],
+			[300, 300],
+			[400, 400],
+			[500, 500],
+		];
+
+		foreach($arrGenerateImageSizes as $arrGenerateImageSize)
+		{
+			self::GenerateRandomImage($strSourceFilePath, $arrGenerateImageSize[0], $arrGenerateImageSize[1], 100);
+
+			foreach($arrShrinkToSizes as $arrShrinkToSize)
+			{
+				// Validate size without resampling
+				self::assertTrue(SimpleImage::shrinkToSize($strSourceFilePath, $strDestinationFilePath, $arrShrinkToSize[0], $arrShrinkToSize[1], false));
+				self::assertEquals([$arrShrinkToSize[0], $arrShrinkToSize[1]], array_slice(getimagesize($strDestinationFilePath), 0, 2));
+
+				// Validate size with resampling
+				self::assertTrue(SimpleImage::shrinkToSize($strSourceFilePath, $strDestinationFilePath, $arrShrinkToSize[0], $arrShrinkToSize[1], true));
+				self::assertEquals([$arrShrinkToSize[0], $arrShrinkToSize[1]], array_slice(getimagesize($strDestinationFilePath), 0, 2));
+
+				// Validate added/missing whitespace ("blackspace" in this test)
+				self::assertTrue(SimpleImage::shrinkToSize($strSourceFilePath, $strDestinationFilePath, $arrShrinkToSize[0], $arrShrinkToSize[1], true, 100, 'image/png', false, '#000000'));
+
+				// Get aspect ratio for generated and shrinked image
+				// < 1.0 - Portait image
+				// = 1.0 - Square image
+				// > 1.0 - Landscape image
+				$fGenerateRatio	= $arrGenerateImageSize[0] / $arrGenerateImageSize[1];
+				$fShrinkRatio	= $arrShrinkToSize[0] / $arrShrinkToSize[1];
+
+				// By default expect white on all sides (ie. no "blackspace")
+				$arrImageSideColors		= [
+					'top'		=> '#FFFFFF',
+					'right'		=> '#FFFFFF',
+					'bottom'	=> '#FFFFFF',
+					'left'		=> '#FFFFFF',
+				];
+
+				// If generated image is smaller than shrinked image, expect "blackspace" on all sides
+				if($arrGenerateImageSize[0] < $arrShrinkToSize[0] && $arrGenerateImageSize[1] < $arrShrinkToSize[1])
+				{
+					$arrImageSideColors['top']		= '#000000';
+					$arrImageSideColors['right']	= '#000000';
+					$arrImageSideColors['bottom']	= '#000000';
+					$arrImageSideColors['left']		= '#000000';
+				}
+				// If generated image ratio is smaller than shrinked image ratio, expect "blackspace" on right and left
+				elseif($fGenerateRatio < $fShrinkRatio)
+				{
+					$arrImageSideColors['right']	= '#000000';
+					$arrImageSideColors['left']		= '#000000';
+				}
+				// If generated image ratio is bigger than shrinked image ratio, expect "blackspace" on top and bottom
+				elseif($fGenerateRatio > $fShrinkRatio)
+				{
+					$arrImageSideColors['top']		= '#000000';
+					$arrImageSideColors['bottom']	= '#000000';
+				}
+
+				// Validate image side colors
+				foreach($arrImageSideColors as $strSide => $strColor)
+				{
+					$iPosX	= 0;
+					$iPosY	= 0;
+					switch($strSide)
+					{
+						case 'top':
+							$iPosX	= (int)floor($arrShrinkToSize[0] / 2);
+							break;
+
+						case 'right':
+							$iPosX	= $arrShrinkToSize[0] - 1;
+							$iPosY	= (int)floor($arrShrinkToSize[1] / 2);
+							break;
+
+						case 'bottom':
+							$iPosX	= (int)floor($arrShrinkToSize[0] / 2);
+							$iPosY	= $arrShrinkToSize[1] - 1;
+							break;
+
+						case 'left':
+							$iPosY	= (int)floor($arrShrinkToSize[1] / 2);
+							break;
+					}
+
+					// Check if color is similar within the given tolerance, since the shrinked image might be "dirty"
+					self::AssertSimilarColor($strColor, SimpleImage::get_color_at_position($strDestinationFilePath, $iPosX, $iPosY), 10);
+				}
+			}
+		}
+
+		unlink($strSourceFilePath);
+		unlink($strDestinationFilePath);
+	}
+
 	public function testShrinkToSquare(): void
 	{
 		$strSourceFilePath		= './test.jpg';
 		$strDestinationFilePath	= './test-shrink-to-square.jpg';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 100, false));
-		self::assertEquals([100, 100], array_slice(getimagesize($strDestinationFilePath), 0, 2));
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 75, false));
-		self::assertEquals([75, 75], array_slice(getimagesize($strDestinationFilePath), 0, 2));
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 50, false));
-		self::assertEquals([50, 50], array_slice(getimagesize($strDestinationFilePath), 0, 2));
+		$arrGenerateImageSizes	= [
+			// Landscape
+			[300, 150],
+			// Portrait
+			[300, 450],
+			// Square
+			[300, 300],
+		];
 
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 100, true));
-		self::assertEquals([100, 100], array_slice(getimagesize($strDestinationFilePath), 0, 2));
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 75, true));
-		self::assertEquals([75, 75], array_slice(getimagesize($strDestinationFilePath), 0, 2));
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 50, true));
-		self::assertEquals([50, 50], array_slice(getimagesize($strDestinationFilePath), 0, 2));
+		$arrShrinkToSquares	= [
+			100,
+			200,
+			300,
+			400,
+			500,
+		];
 
-		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 50, true, null, 'image/png'));
-		self::assertEquals([50, 50], array_slice(getimagesize($strDestinationFilePath), 0, 2));
-		self::assertEquals('image/png', mime_content_type($strDestinationFilePath));
+		foreach($arrGenerateImageSizes as $arrGenerateImageSize)
+		{
+			self::GenerateRandomImage($strSourceFilePath, $arrGenerateImageSize[0], $arrGenerateImageSize[1]);
+
+			foreach($arrShrinkToSquares as $iSquareSize)
+			{
+				self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, $iSquareSize, false));
+				self::assertEquals([$iSquareSize, $iSquareSize], array_slice(getimagesize($strDestinationFilePath), 0, 2));
+
+				self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, $iSquareSize, true));
+				self::assertEquals([$iSquareSize, $iSquareSize], array_slice(getimagesize($strDestinationFilePath), 0, 2));
+			}
+		}
 
 		unlink($strSourceFilePath);
 		unlink($strDestinationFilePath);

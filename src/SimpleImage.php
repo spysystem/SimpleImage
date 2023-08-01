@@ -875,7 +875,15 @@ class SimpleImage
 		{
 			// Make the standard background for transparent images WHITE instead of BLACK (e.g. when you convert from png to jpeg).
 			$iWhite	= imagecolorallocate($rNew, 255, 255, 255);
-			imagefilledrectangle($rNew, 0, 0, $iNewWidth, $iNewHeight, $iWhite);
+
+			imagefilledrectangle(
+				$rNew,
+				0,
+				0,
+				(int)$iNewWidth,
+				(int)$iNewHeight,
+				$iWhite
+			);
 		}
 		else
 		{
@@ -903,11 +911,33 @@ class SimpleImage
 
 		if($bResample)
 		{
-			imagecopyresampled($rNew, $rOriginal, $arrPos[0], $arrPos[1], 0, 0, $iNewWidth, $iNewHeight, $arrInfo[0], $arrInfo[1]);
+			imagecopyresampled(
+				$rNew,
+				$rOriginal,
+				(int)$arrPos[0],
+				(int)$arrPos[1],
+				0,
+				0,
+				(int)$iNewWidth,
+				(int)$iNewHeight,
+				$arrInfo[0],
+				$arrInfo[1]
+			);
 		}
 		else
 		{
-			imagecopyresized($rNew, $rOriginal, $arrPos[0], $arrPos[1], 0, 0, $iNewWidth, $iNewHeight, $arrInfo[0], $arrInfo[1]);
+			imagecopyresized(
+				$rNew,
+				$rOriginal,
+				(int)$arrPos[0],
+				(int)$arrPos[1],
+				0,
+				0,
+				(int)$iNewWidth,
+				(int)$iNewHeight,
+				$arrInfo[0],
+				$arrInfo[1]
+			);
 		}
 
 		// Override mimetype (say you want to convert 'image/png' to 'image/jpeg'
@@ -1004,7 +1034,7 @@ class SimpleImage
 	 */
 	public static function imageTrimBox($rImage, $mHexColor = null): array
 	{
-		if(ctype_xdigit($mHexColor))
+		if(ctype_xdigit($mHexColor ?? ''))
 		{
 			$iColor	= $mHexColor;
 		}

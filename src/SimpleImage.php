@@ -881,8 +881,8 @@ class SimpleImage
 				$rNew,
 				0,
 				0,
-				$iNewWidth,
-				$iNewHeight,
+				(int)$iNewWidth,
+				(int)$iNewHeight,
 				imagecolorallocate($rNew, 255, 255, 255)
 			);
 		}
@@ -915,12 +915,12 @@ class SimpleImage
 			imagecopyresampled(
 				$rNew,
 				$rOriginal,
-				$arrPos[0],
-				$arrPos[1],
+				(int)$arrPos[0],
+				(int)$arrPos[1],
 				0,
 				0,
-				$iNewWidth,
-				$iNewHeight,
+				(int)$iNewWidth,
+				(int)$iNewHeight,
 				$iImageWidth,
 				$iImageHeight
 			);
@@ -930,12 +930,12 @@ class SimpleImage
 			imagecopyresized(
 				$rNew,
 				$rOriginal,
-				$arrPos[0],
-				$arrPos[1],
+				(int)$arrPos[0],
+				(int)$arrPos[1],
 				0,
 				0,
-				$iNewWidth,
-				$iNewHeight,
+				(int)$iNewWidth,
+				(int)$iNewHeight,
 				$iImageWidth,
 				$iImageHeight
 			);
@@ -1063,7 +1063,7 @@ class SimpleImage
 	 */
 	public static function imageTrimBox($rImage, $mHexColor = null): array
 	{
-		if(ctype_xdigit($mHexColor))
+		if(ctype_xdigit($mHexColor ?? ''))
 		{
 			$iColor	= $mHexColor;
 		}

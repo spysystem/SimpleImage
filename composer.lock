@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "45fd26dd5f8c7dc8ea52968c15f6e2c5",
+    "content-hash": "1eac9b9d8329a1ab7008173ac8699520",
     "packages": [
         {
             "name": "league/color-extractor",
@@ -1590,9 +1590,13 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.0",
+        "php": "7.1 - 8.1",
         "ext-gd": "*",
         "ext-ctype": "*"
     },
-    "platform-dev": []
+    "platform-dev": {
+        "ext-exif": "*",
+        "ext-fileinfo": "*"
+    },
+    "plugin-api-version": "2.3.0"
 }

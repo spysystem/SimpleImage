@@ -107,22 +107,22 @@ class SimpleImageTest extends TestCase
 	 */
 	private static function GenerateRandomImage(string $strFilePath, int $iWidth = 100, int $iHeight = 100, ?int $iQuality = null): bool
 	{
-		$rImage	= imagecreatetruecolor($iWidth, $iHeight);
+		$rImage = imagecreatetruecolor($iWidth, $iHeight);
 
-		$iColor	= imagecolorallocate($rImage, 255, 255, 255);
-		$iX1	= 0;
-		$iY1	= 0;
-		$iX2	= $iWidth;
-		$iY2	= $iHeight;
+		$iColor = imagecolorallocate($rImage, 255, 255, 255);
+		$iX1    = 0;
+		$iY1    = 0;
+		$iX2    = $iWidth;
+		$iY2    = $iHeight;
 		imagefilledrectangle($rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
 
 		for($iCount = 0; $iCount <= 5; $iCount++)
 		{
-			$iColor	= imagecolorallocate($rImage, rand(0, 255), rand(0, 255), rand(0, 255));
-			$iX1	= rand(0, 99);
-			$iY1	= rand(0, 99);
-			$iX2	= rand($iX1, 100);
-			$iY2	= rand($iY1, 100);
+			$iColor = imagecolorallocate($rImage, rand(0, 255), rand(0, 255), rand(0, 255));
+			$iX1    = rand(0, 99);
+			$iY1    = rand(0, 99);
+			$iX2    = rand($iX1, 100);
+			$iY2    = rand($iY1, 100);
 			imagefilledrectangle($rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
 		}
 
@@ -141,13 +141,13 @@ class SimpleImageTest extends TestCase
 	 */
 	private static function GenerateWhiteImage(string $strFilePath, int $iWidth = 100, int $iHeight = 100, ?int $iQuality = null): bool
 	{
-		$rImage	= imagecreatetruecolor($iWidth, $iHeight);
+		$rImage = imagecreatetruecolor($iWidth, $iHeight);
 
-		$iWhite	= imagecolorallocate($rImage, 255, 255, 255);
-		$iX1	= 0;
-		$iY1	= 0;
-		$iX2	= $iWidth;
-		$iY2	= $iHeight;
+		$iWhite = imagecolorallocate($rImage, 255, 255, 255);
+		$iX1    = 0;
+		$iY1    = 0;
+		$iX2    = $iWidth;
+		$iY2    = $iHeight;
 		imagefilledrectangle($rImage, $iX1, $iY1, $iX2, $iY2, $iWhite);
 
 		return self::SaveImage($rImage, $strFilePath, $iQuality);
@@ -169,18 +169,18 @@ class SimpleImageTest extends TestCase
 	{
 		$rImage = imagecreatetruecolor($iWidth, $iHeight);
 
-		$iColor	= imagecolorallocate($rImage, 255, 255, 255);
-		$iX1	= 0;
-		$iY1	= 0;
-		$iX2	= $iWidth;
-		$iY2	= $iHeight;
+		$iColor = imagecolorallocate($rImage, 255, 255, 255);
+		$iX1    = 0;
+		$iY1    = 0;
+		$iX2    = $iWidth;
+		$iY2    = $iHeight;
 		imagefilledrectangle($rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
 
-		$iColor	= imagecolorallocate($rImage, 0, 0, 0);
-		$iX1	= (int)($iWidth / 2 - ($iCenterWidth / 2));
-		$iY1	= (int)($iHeight / 2 - ($iCenterHeight / 2));
-		$iX2	= ($iX1 + $iCenterWidth - 1);
-		$iY2	= ($iY1 + $iCenterHeight - 1);
+		$iColor = imagecolorallocate($rImage, 0, 0, 0);
+		$iX1    = (int)($iWidth / 2 - ($iCenterWidth / 2));
+		$iY1    = (int)($iHeight / 2 - ($iCenterHeight / 2));
+		$iX2    = ($iX1 + $iCenterWidth - 1);
+		$iY2    = ($iY1 + $iCenterHeight - 1);
 		imagefilledrectangle($rImage, $iX1, $iY1, $iX2, $iY2, $iColor);
 
 		return self::SaveImage($rImage, $strFilePath, $iQuality);
@@ -190,19 +190,20 @@ class SimpleImageTest extends TestCase
 	 * Get image quality from a file object
 	 *
 	 * @param string $strFilePath
+	 *
 	 * @return int
 	 */
 	private static function GetImageQuality(string $strFilePath): int
 	{
-		$iQuality	= 0;
+		$iQuality = 0;
 
 		// Extract from image exif data
 		if(pathinfo($strFilePath, PATHINFO_EXTENSION) === 'jpg')
 		{
-			$arrImageExifData	= exif_read_data($strFilePath);
+			$arrImageExifData = exif_read_data($strFilePath);
 			if(!empty($arrImageExifData['COMMENT'][0]) && preg_match('/quality = ([0-9]+)/', $arrImageExifData['COMMENT'][0], $arrMatches))
 			{
-				$iQuality	= (int)$arrMatches[1];
+				$iQuality = (int)$arrMatches[1];
 			}
 		}
 
@@ -219,9 +220,9 @@ class SimpleImageTest extends TestCase
 	{
 		try
 		{
-			$strTemporaryFilePath	= './assert-image-flipped.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
+			$strTemporaryFilePath = './assert-image-flipped.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
 
-			$rImage	= self::LoadImage($strSourceFilePath);
+			$rImage = self::LoadImage($strSourceFilePath);
 			imageflip($rImage, $iMode);
 			self::assertTrue(self::SaveImage($rImage, $strTemporaryFilePath, $iQuality));
 
@@ -246,10 +247,10 @@ class SimpleImageTest extends TestCase
 	{
 		try
 		{
-			$strTemporaryFilePath	= './assert-image-rotated.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
+			$strTemporaryFilePath = './assert-image-rotated.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
 
-			$rImage	= self::LoadImage($strSourceFilePath);
-			$rImage	= imagerotate($rImage, $iAngle, $iBackgroundColor);
+			$rImage = self::LoadImage($strSourceFilePath);
+			$rImage = imagerotate($rImage, $iAngle, $iBackgroundColor);
 			self::assertTrue(self::SaveImage($rImage, $strTemporaryFilePath, $iQuality));
 
 			self::assertFileEquals($strTemporaryFilePath, $strDestinationFilePath);
@@ -276,8 +277,8 @@ class SimpleImageTest extends TestCase
 	{
 		try
 		{
-			$strTemporaryFilePath	= './assert-image-filter-applied.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
-			$rImage					= self::LoadImage($strSourceFilePath);
+			$strTemporaryFilePath = './assert-image-filter-applied.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
+			$rImage               = self::LoadImage($strSourceFilePath);
 			imagefilter($rImage, $iFilterType, ...array_filter([$iArg1, $iArg2, $iArg3, $iArg4], static function($mValue): bool {
 				return $mValue !== null;
 			}));
@@ -293,20 +294,20 @@ class SimpleImageTest extends TestCase
 
 	public function testQuality(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-quality.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-quality.jpg';
 
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100, 100);
 		self::assertEquals(100, self::GetImageQuality($strSourceFilePath));
 
-		$arrData	= [
-			200		=> 100,
-			100		=> 100,
-			75		=> 75,
-			50		=> 50,
-			25		=> 25,
-			0		=> 0,
-			-100	=> 0,
+		$arrData = [
+			200  => 100,
+			100  => 100,
+			75   => 75,
+			50   => 50,
+			25   => 25,
+			0    => 0,
+			-100 => 0,
 		];
 
 		foreach($arrData as $iQuality => $iExpected)
@@ -322,15 +323,15 @@ class SimpleImageTest extends TestCase
 	public function testConvert(): void
 	{
 		// Test GIF to JPG and PNG
-		$strSourceFilePath	= './test.gif';
+		$strSourceFilePath = './test.gif';
 		self::GenerateWhiteImage($strSourceFilePath);
 
-		$strDestinationFilePath	= './test-convert.jpg';
+		$strDestinationFilePath = './test-convert.jpg';
 		self::assertTrue(SimpleImage::convert($strSourceFilePath, $strDestinationFilePath));
 		self::assertEquals('image/jpeg', mime_content_type($strDestinationFilePath));
 		unlink($strDestinationFilePath);
 
-		$strDestinationFilePath	= './test-convert.png';
+		$strDestinationFilePath = './test-convert.png';
 		self::assertTrue(SimpleImage::convert($strSourceFilePath, $strDestinationFilePath));
 		self::assertEquals('image/png', mime_content_type($strDestinationFilePath));
 		unlink($strDestinationFilePath);
@@ -338,15 +339,15 @@ class SimpleImageTest extends TestCase
 		unlink($strSourceFilePath);
 
 		// Test JPG to GIF and PNG
-		$strSourceFilePath	= './test.jpg';
+		$strSourceFilePath = './test.jpg';
 		self::GenerateWhiteImage($strSourceFilePath);
 
-		$strDestinationFilePath	= './test-convert.gif';
+		$strDestinationFilePath = './test-convert.gif';
 		self::assertTrue(SimpleImage::convert($strSourceFilePath, $strDestinationFilePath));
 		self::assertEquals('image/gif', mime_content_type($strDestinationFilePath));
 		unlink($strDestinationFilePath);
 
-		$strDestinationFilePath	= './test-convert.png';
+		$strDestinationFilePath = './test-convert.png';
 		self::assertTrue(SimpleImage::convert($strSourceFilePath, $strDestinationFilePath));
 		self::assertEquals('image/png', mime_content_type($strDestinationFilePath));
 		unlink($strDestinationFilePath);
@@ -354,15 +355,15 @@ class SimpleImageTest extends TestCase
 		unlink($strSourceFilePath);
 
 		// Test PNG to GIF and JPG
-		$strSourceFilePath	= './test.png';
+		$strSourceFilePath = './test.png';
 		self::GenerateWhiteImage($strSourceFilePath);
 
-		$strDestinationFilePath	= './test-convert.gif';
+		$strDestinationFilePath = './test-convert.gif';
 		self::assertTrue(SimpleImage::convert($strSourceFilePath, $strDestinationFilePath));
 		self::assertEquals('image/gif', mime_content_type($strDestinationFilePath));
 		unlink($strDestinationFilePath);
 
-		$strDestinationFilePath	= './test-convert.jpg';
+		$strDestinationFilePath = './test-convert.jpg';
 		self::assertTrue(SimpleImage::convert($strSourceFilePath, $strDestinationFilePath));
 		self::assertEquals('image/jpeg', mime_content_type($strDestinationFilePath));
 		unlink($strDestinationFilePath);
@@ -372,8 +373,8 @@ class SimpleImageTest extends TestCase
 
 	public function testFlip(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-flip.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-flip.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::flip($strSourceFilePath, $strDestinationFilePath, 'vertical'));
@@ -396,8 +397,8 @@ class SimpleImageTest extends TestCase
 
 	public function testRotate(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-rotate.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-rotate.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::rotate($strSourceFilePath, $strDestinationFilePath, 45, 0));
@@ -427,8 +428,8 @@ class SimpleImageTest extends TestCase
 
 	public function testGrayscale(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-greyscale.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-greyscale.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::grayscale($strSourceFilePath, $strDestinationFilePath));
@@ -443,8 +444,8 @@ class SimpleImageTest extends TestCase
 
 	public function testInvert(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-invert.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-invert.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::invert($strSourceFilePath, $strDestinationFilePath));
@@ -459,8 +460,8 @@ class SimpleImageTest extends TestCase
 
 	public function testBrightness(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-brightness.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-brightness.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::brightness($strSourceFilePath, $strDestinationFilePath, -255));
@@ -478,8 +479,8 @@ class SimpleImageTest extends TestCase
 
 	public function testContrast(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-contrast.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-contrast.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::contrast($strSourceFilePath, $strDestinationFilePath, 100));
@@ -497,8 +498,8 @@ class SimpleImageTest extends TestCase
 
 	public function testColorize(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-colorize.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-colorize.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::colorize($strSourceFilePath, $strDestinationFilePath, -255, -255, -255, 0));
@@ -525,8 +526,8 @@ class SimpleImageTest extends TestCase
 
 	public function testEdgeDetect(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-edge-detect.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-edge-detect.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::edgedetect($strSourceFilePath, $strDestinationFilePath));
@@ -541,8 +542,8 @@ class SimpleImageTest extends TestCase
 
 	public function testEmboss(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-emboss.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-emboss.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::emboss($strSourceFilePath, $strDestinationFilePath));
@@ -557,8 +558,8 @@ class SimpleImageTest extends TestCase
 
 	public function testBlur(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-blur.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-blur.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::blur($strSourceFilePath, $strDestinationFilePath));
@@ -573,8 +574,8 @@ class SimpleImageTest extends TestCase
 
 	public function testSketch(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-sketch.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-sketch.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::sketch($strSourceFilePath, $strDestinationFilePath));
@@ -589,8 +590,8 @@ class SimpleImageTest extends TestCase
 
 	public function testSmooth(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-smooth.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-smooth.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::smooth($strSourceFilePath, $strDestinationFilePath, 1));
@@ -605,8 +606,8 @@ class SimpleImageTest extends TestCase
 
 	public function testPixelate(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-pixelate.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-pixelate.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::pixelate($strSourceFilePath, $strDestinationFilePath, 5, false));
@@ -639,15 +640,15 @@ class SimpleImageTest extends TestCase
 
 	public function testSepia(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-sepia.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-sepia.jpg';
 		self::GenerateRandomImage($strSourceFilePath);
 
 		self::assertTrue(SimpleImage::sepia($strSourceFilePath, $strDestinationFilePath));
 		try
 		{
-			$strTemporaryFilePath	= './assert-image-filter-applied.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
-			$rImage					= self::LoadImage($strSourceFilePath);
+			$strTemporaryFilePath = './assert-image-filter-applied.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
+			$rImage               = self::LoadImage($strSourceFilePath);
 			imagefilter($rImage, IMG_FILTER_GRAYSCALE);
 			imagefilter($rImage, IMG_FILTER_COLORIZE, 90, 60, 30);
 			self::assertTrue(self::SaveImage($rImage, $strTemporaryFilePath));
@@ -665,8 +666,8 @@ class SimpleImageTest extends TestCase
 
 	public function testResize(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-resize.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-resize.jpg';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
 		self::assertTrue(SimpleImage::resize($strSourceFilePath, $strDestinationFilePath, 100, 100, false));
@@ -696,8 +697,8 @@ class SimpleImageTest extends TestCase
 
 	public function testResizeToWidth(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-resize-to-width.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-resize-to-width.jpg';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
 		self::assertTrue(SimpleImage::resize_to_width($strSourceFilePath, $strDestinationFilePath, 100, false));
@@ -727,8 +728,8 @@ class SimpleImageTest extends TestCase
 
 	public function testResizeToHeight(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-resize-to-height.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-resize-to-height.jpg';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
 		self::assertTrue(SimpleImage::resize_to_height($strSourceFilePath, $strDestinationFilePath, 100, false));
@@ -758,8 +759,8 @@ class SimpleImageTest extends TestCase
 
 	public function testShrinkToFit(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-shrink-to-fit.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-shrink-to-fit.jpg';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
 		self::assertTrue(SimpleImage::shrink_to_fit($strSourceFilePath, $strDestinationFilePath, 100, 100, false));
@@ -789,8 +790,8 @@ class SimpleImageTest extends TestCase
 
 	public function testShrinkToSquare(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-shrink-to-square.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-shrink-to-square.jpg';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
 		self::assertTrue(SimpleImage::shrink_to_square($strSourceFilePath, $strDestinationFilePath, 100, false));
@@ -817,8 +818,8 @@ class SimpleImageTest extends TestCase
 
 	public function testShrinkToSquareNonWhite(): void
 	{
-		$strSourceFilePath		= './test.png';
-		$strDestinationFilePath	= './test-shrink-to-square-non-white.png';
+		$strSourceFilePath      = './test.png';
+		$strDestinationFilePath = './test-shrink-to-square-non-white.png';
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 50, 50);
 		self::assertEquals('#FFFFFF', SimpleImage::get_color_at_position($strSourceFilePath, 0, 0));
@@ -842,7 +843,7 @@ class SimpleImageTest extends TestCase
 
 	public function testGetColorAtPosition(): void
 	{
-		$strSourceFilePath		= './test.png';
+		$strSourceFilePath = './test.png';
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 50, 50);
 		self::assertEquals('#FFFFFF', SimpleImage::get_color_at_position($strSourceFilePath, 0, 0));
@@ -857,16 +858,16 @@ class SimpleImageTest extends TestCase
 		self::assertEquals('#FFFFFF', SimpleImage::get_color_at_position($strSourceFilePath, 199, 199));
 
 		self::GenerateRandomImage($strSourceFilePath, 100, 100);
-		$rImage	= self::LoadImage($strSourceFilePath);
+		$rImage = self::LoadImage($strSourceFilePath);
 
-		$iColor		= imagecolorat($rImage, 0, 0);
-		$strColor	= '#'.sprintf('%06X', $iColor);
+		$iColor   = imagecolorat($rImage, 0, 0);
+		$strColor = '#'.sprintf('%06X', $iColor);
 		self::assertEquals($strColor, SimpleImage::get_color_at_position($strSourceFilePath, 0, 0));
-		$iColor		= imagecolorat($rImage, 50, 50);
-		$strColor	= '#'.sprintf('%06X', $iColor);
+		$iColor   = imagecolorat($rImage, 50, 50);
+		$strColor = '#'.sprintf('%06X', $iColor);
 		self::assertEquals($strColor, SimpleImage::get_color_at_position($strSourceFilePath, 50, 50));
-		$iColor		= imagecolorat($rImage, 99, 99);
-		$strColor	= '#'.sprintf('%06X', $iColor);
+		$iColor   = imagecolorat($rImage, 99, 99);
+		$strColor = '#'.sprintf('%06X', $iColor);
 		self::assertEquals($strColor, SimpleImage::get_color_at_position($strSourceFilePath, 99, 99));
 
 		unlink($strSourceFilePath);
@@ -875,7 +876,7 @@ class SimpleImageTest extends TestCase
 	public function testShrinkToNonWhite(): void
 	{
 		// Note: JPG is to "dirty" for testing shrink to white (JPG compression sometimes generates non-white pixels)
-		$strSourceFilePath		= './test.png';
+		$strSourceFilePath = './test.png';
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 100, 100);
 		self::assertEquals([100, 100], array_slice(getimagesize($strSourceFilePath), 0, 2));
@@ -903,11 +904,11 @@ class SimpleImageTest extends TestCase
 	public function testImageTrimBox(): void
 	{
 		// Note: JPG is to "dirty" for testing shrink to white (JPG compression sometimes generates non-white pixels)
-		$strSourceFilePath		= './test.png';
-		$strDestinationFilePath	= './test-image-trim-box.png';
+		$strSourceFilePath      = './test.png';
+		$strDestinationFilePath = './test-image-trim-box.png';
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 100, 100);
-		$arrExpected	= [
+		$arrExpected = [
 			'#'  => 2,
 			'l'  => 0,
 			't'  => 0,
@@ -918,14 +919,14 @@ class SimpleImageTest extends TestCase
 			'w1' => 100,
 			'h1' => 100,
 		];
-		$arrActual		= SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
+		$arrActual   = SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
 		self::assertEquals($arrExpected, $arrActual);
 		copy($strSourceFilePath, $strDestinationFilePath);
 		self::assertTrue(SimpleImage::shrink_to_non_white($strDestinationFilePath));
 		self::assertEquals([100, 100], array_slice(getimagesize($strDestinationFilePath), 0, 2));
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 100, 50);
-		$arrExpected	= [
+		$arrExpected = [
 			'#'  => 1,
 			'l'  => 0,
 			't'  => 25,
@@ -936,14 +937,14 @@ class SimpleImageTest extends TestCase
 			'w1' => 100,
 			'h1' => 100,
 		];
-		$arrActual		= SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
+		$arrActual   = SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
 		self::assertEquals($arrExpected, $arrActual);
 		copy($strSourceFilePath, $strDestinationFilePath);
 		self::assertTrue(SimpleImage::shrink_to_non_white($strDestinationFilePath));
 		self::assertEquals([100, 50], array_slice(getimagesize($strDestinationFilePath), 0, 2));
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 50, 100);
-		$arrExpected	= [
+		$arrExpected = [
 			'#'  => 1,
 			'l'  => 25,
 			't'  => 0,
@@ -954,14 +955,14 @@ class SimpleImageTest extends TestCase
 			'w1' => 100,
 			'h1' => 100,
 		];
-		$arrActual		= SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
+		$arrActual   = SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
 		self::assertEquals($arrExpected, $arrActual);
 		copy($strSourceFilePath, $strDestinationFilePath);
 		self::assertTrue(SimpleImage::shrink_to_non_white($strDestinationFilePath));
 		self::assertEquals([50, 100], array_slice(getimagesize($strDestinationFilePath), 0, 2));
 
 		self::GenerateWhiteImageWithBlackCenter($strSourceFilePath, 100, 100, 50, 50);
-		$arrExpected	= [
+		$arrExpected = [
 			'#'  => 1,
 			'l'  => 25,
 			't'  => 25,
@@ -972,7 +973,7 @@ class SimpleImageTest extends TestCase
 			'w1' => 100,
 			'h1' => 100,
 		];
-		$arrActual		= SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
+		$arrActual   = SimpleImage::imageTrimBox(self::LoadImage($strSourceFilePath));
 		self::assertEquals($arrExpected, $arrActual);
 		copy($strSourceFilePath, $strDestinationFilePath);
 		self::assertTrue(SimpleImage::shrink_to_non_white($strDestinationFilePath));
@@ -984,8 +985,8 @@ class SimpleImageTest extends TestCase
 
 	public function testCrop(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-crop.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-crop.jpg';
 
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 		self::assertTrue(SimpleImage::crop($strSourceFilePath, $strDestinationFilePath, 0, 0, 100, 100));
@@ -1009,8 +1010,8 @@ class SimpleImageTest extends TestCase
 
 	public function testSquareCrop(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-square-crop.jpg';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-square-crop.jpg';
 
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 		self::assertTrue(SimpleImage::square_crop($strSourceFilePath, $strDestinationFilePath));
@@ -1042,13 +1043,13 @@ class SimpleImageTest extends TestCase
 
 	public function testWatermark(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-watermark.jpg';
-		$strWatermarkFilePath	= './watermark.png';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-watermark.jpg';
+		$strWatermarkFilePath   = './watermark.png';
 		self::GenerateRandomImage($strSourceFilePath, 100, 100);
 		self::GenerateRandomImage($strWatermarkFilePath, 50, 50);
 
-		$arrPositions	= [
+		$arrPositions = [
 			'top-left',
 			'top',
 			'top-right',
@@ -1072,15 +1073,15 @@ class SimpleImageTest extends TestCase
 
 	public function testText(): void
 	{
-		$strSourceFilePath		= './test.jpg';
-		$strDestinationFilePath	= './test-text.jpg';
-		$strText				= 'test';
-		$strFontFile			= dirname(__FILE__).'/fonts/arial.ttf';
-		$iFontSize				= 12;
-		$strFontColor			= '#000000';
+		$strSourceFilePath      = './test.jpg';
+		$strDestinationFilePath = './test-text.jpg';
+		$strText                = 'test';
+		$strFontFile            = dirname(__FILE__).'/fonts/arial.ttf';
+		$iFontSize              = 12;
+		$strFontColor           = '#000000';
 		self::GenerateWhiteImage($strSourceFilePath, 100, 100);
 
-		$arrPositions	= [
+		$arrPositions = [
 			'top-left',
 			'top',
 			'top-right',

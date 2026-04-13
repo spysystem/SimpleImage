@@ -27,7 +27,7 @@ class SimpleImage
 	 */
 	private function load(string $strSource)
 	{
-		$arrInfo	= getimagesize($strSource);
+		$arrInfo = getimagesize($strSource);
 		if(!$arrInfo)
 		{
 			return false;
@@ -36,15 +36,15 @@ class SimpleImage
 		switch($arrInfo['mime'])
 		{
 			case 'image/gif':
-				$rImage	= imagecreatefromgif($strSource);
+				$rImage = imagecreatefromgif($strSource);
 				break;
 
 			case 'image/jpeg':
-				$rImage	= imagecreatefromjpeg($strSource);
+				$rImage = imagecreatefromjpeg($strSource);
 				break;
 
 			case 'image/png':
-				$rImage	= imagecreatefrompng($strSource);
+				$rImage = imagecreatefrompng($strSource);
 				break;
 
 			default:
@@ -77,15 +77,15 @@ class SimpleImage
 			case 'image/jpeg':
 				if($iQuality === null)
 				{
-					$iQuality	= 85;
+					$iQuality = 85;
 				}
 				if($iQuality < 0)
 				{
-					$iQuality	= 0;
+					$iQuality = 0;
 				}
 				if($iQuality > 100)
 				{
-					$iQuality	= 100;
+					$iQuality = 100;
 				}
 
 				return imagejpeg($rImage, $strFilePath, $iQuality);
@@ -94,15 +94,15 @@ class SimpleImage
 			case 'image/png':
 				if($iQuality === null)
 				{
-					$iQuality	= 9;
+					$iQuality = 9;
 				}
 				if($iQuality > 9)
 				{
-					$iQuality	= 9;
+					$iQuality = 9;
 				}
 				if($iQuality < 1)
 				{
-					$iQuality	= 0;
+					$iQuality = 0;
 				}
 
 				return imagepng($rImage, $strFilePath, $iQuality);
@@ -130,16 +130,16 @@ class SimpleImage
 	private function imagecopymerge_alpha(
 		$rDestination,
 		$rSource,
-		int	$iDesinationX,
-		int	$iDestinationY,
-		int	$iSourceX,
-		int	$iSourceY,
-		int	$iSourceWidth,
-		int	$iSourceHeight,
-		int	$iPct
+		int $iDesinationX,
+		int $iDestinationY,
+		int $iSourceX,
+		int $iSourceY,
+		int $iSourceWidth,
+		int $iSourceHeight,
+		int $iPct
 	): bool
 	{
-		$rCut	= imagecreatetruecolor($iSourceWidth, $iSourceHeight);
+		$rCut = imagecreatetruecolor($iSourceWidth, $iSourceHeight);
 		imagecopy($rCut, $rDestination, 0, 0, $iDesinationX, $iDestinationY, $iSourceWidth, $iSourceHeight);
 		imagecopy($rCut, $rSource, 0, 0, $iSourceX, $iSourceY, $iSourceWidth, $iSourceHeight);
 
@@ -157,23 +157,23 @@ class SimpleImage
 	{
 		if($strHexColor[0] === '#')
 		{
-			$strHexColor	= substr($strHexColor, 1);
+			$strHexColor = substr($strHexColor, 1);
 		}
 
 		if(strlen($strHexColor) === 6)
 		{
-			[$strRed, $strGreen, $strBlue]	= [
+			[$strRed, $strGreen, $strBlue] = [
 				$strHexColor[0].$strHexColor[1],
 				$strHexColor[2].$strHexColor[3],
-				$strHexColor[4].$strHexColor[5]
+				$strHexColor[4].$strHexColor[5],
 			];
 		}
 		elseif(strlen($strHexColor) === 3)
 		{
-			[$strRed, $strGreen, $strBlue]	= [
+			[$strRed, $strGreen, $strBlue] = [
 				$strHexColor[0].$strHexColor[0],
 				$strHexColor[1].$strHexColor[1],
-				$strHexColor[2].$strHexColor[2]
+				$strHexColor[2].$strHexColor[2],
 			];
 		}
 		else
@@ -182,9 +182,9 @@ class SimpleImage
 		}
 
 		return [
-			'r'	=> hexdec($strRed),
-			'g'	=> hexdec($strGreen),
-			'b'	=> hexdec($strBlue)
+			'r' => hexdec($strRed),
+			'g' => hexdec($strGreen),
+			'b' => hexdec($strBlue),
 		];
 	}
 
@@ -199,8 +199,8 @@ class SimpleImage
 	 */
 	public static function convert(string $strSource, string $strDestination, ?int $iQuality = null): bool
 	{
-		$oImage			= new SimpleImage;
-		[$rOriginal]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal] = $oImage->load($strSource);
 
 		switch(strtolower(preg_replace('/^.*\./', '', $strDestination)))
 		{
@@ -232,16 +232,16 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function flip(
-		string	$strSource,
-		string	$strDestination,
-		string	$strDirection,
-		?int	$iQuality	= null
+		string $strSource,
+		string $strDestination,
+		string $strDirection,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
-		$rNew	= imagecreatetruecolor($arrInfo[0], $arrInfo[1]);
+		$rNew = imagecreatetruecolor($arrInfo[0], $arrInfo[1]);
 
 		switch(strtolower($strDirection))
 		{
@@ -279,41 +279,42 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function rotate(
-		string	$strSource,
-		string	$strDestination,
-				$mAngle				= 270,
-		string	$strBackgroundColor	= '#FFFFFF',
-		?int	$iQuality			= null
+		string $strSource,
+		string $strDestination,
+		       $mAngle = 270,
+		string $strBackgroundColor = '#FFFFFF',
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine angle
-		$mAngle	= strtolower($mAngle);
+		$mAngle = strtolower($mAngle);
 		if($mAngle === 'cw' || $mAngle === 'clockwise')
 		{
-			$mAngle	= 270;
+			$mAngle = 270;
 		}
 		if($mAngle === 'ccw' || $mAngle === 'counterclockwise')
 		{
-			$mAngle	= 90;
+			$mAngle = 90;
 		}
 
-		$arrRgb				= $oImage->hex2rgb($strBackgroundColor);
-		$iBackgroundColor	= imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
-		$rNew				= imagerotate($rOriginal, $mAngle, $iBackgroundColor);
+		$arrRgb           = $oImage->hex2rgb($strBackgroundColor);
+		$iBackgroundColor = imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
+		$rNew             = imagerotate($rOriginal, $mAngle, $iBackgroundColor);
 
 		/**
 		 * Suppress the warning: tempnam(): file created in the system's temporary directory
+		 *
 		 * @see https://www.php.net/ChangeLog-7.php#7.1.0
 		 *      Fixed bug #69489 (tempnam() should raise notice if falling back to temp dir).
 		 */
-		$strDestinationTmp	= @tempnam('/tmp', 'img-rotate');
-		$bSuccess			= false;
+		$strDestinationTmp = @tempnam('/tmp', 'img-rotate');
+		$bSuccess          = false;
 		if($oImage->save($rNew, $strDestinationTmp, $arrInfo['mime'], $iQuality))
 		{
-			$bSuccess	= rename($strDestinationTmp, $strDestination);
+			$bSuccess = rename($strDestinationTmp, $strDestination);
 		}
 
 		return $bSuccess;
@@ -330,8 +331,8 @@ class SimpleImage
 	 */
 	public static function grayscale(string $strSource, string $strDestination, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_GRAYSCALE);
 
@@ -349,8 +350,8 @@ class SimpleImage
 	 */
 	public static function invert(string $strSouce, string $strDestination, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSouce);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSouce);
 
 		imagefilter($rOriginal, IMG_FILTER_NEGATE);
 
@@ -369,8 +370,8 @@ class SimpleImage
 	 */
 	public static function brightness(string $strSource, string $strDestination, int $iLevel, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_BRIGHTNESS, $iLevel);
 
@@ -389,8 +390,8 @@ class SimpleImage
 	 */
 	public static function contrast(string $strSource, string $strDestination, int $iLevel, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_CONTRAST, $iLevel);
 
@@ -411,17 +412,17 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function colorize(
-		string	$strSource,
-		string	$strDestination,
-		int		$iRed,
-		int		$iGreen,
-		int		$iBlue,
-		int		$iAlpha,
-		?int	$iQuality	= null
+		string $strSource,
+		string $strDestination,
+		int    $iRed,
+		int    $iGreen,
+		int    $iBlue,
+		int    $iAlpha,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_COLORIZE, $iRed, $iGreen, $iBlue, $iAlpha);
 
@@ -439,8 +440,8 @@ class SimpleImage
 	 */
 	public static function edgedetect(string $strSource, string $strDestination, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_EDGEDETECT);
 
@@ -458,8 +459,8 @@ class SimpleImage
 	 */
 	public static function emboss(string $strSource, string $strDestination, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_EMBOSS);
 
@@ -478,8 +479,8 @@ class SimpleImage
 	 */
 	public static function blur(string $strSource, string $strDestination, int $iLevel = 1, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		for($iCount = 0; $iCount < $iLevel; $iCount++)
 		{
@@ -501,8 +502,8 @@ class SimpleImage
 	 */
 	public static function sketch(string $strSource, string $strDestination, int $iLevel = 1, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		for($iCount = 0; $iCount < $iLevel; $iCount++)
 		{
@@ -524,8 +525,8 @@ class SimpleImage
 	 */
 	public static function smooth(string $strSource, string $strDestination, int $iLevel, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_SMOOTH, $iLevel);
 
@@ -544,15 +545,15 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function pixelate(
-		string	$strSource,
-		string	$strDestination,
-		int		$iBlockSize,
-		bool	$bAdvancedPix	= false,
-		?int	$iQuality		= null
+		string $strSource,
+		string $strDestination,
+		int    $iBlockSize,
+		bool   $bAdvancedPix = false,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_PIXELATE, $iBlockSize, $bAdvancedPix);
 
@@ -570,8 +571,8 @@ class SimpleImage
 	 */
 	public static function sepia(string $strSource, string $strDestination, ?int $iQuality = null): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_GRAYSCALE);
 		imagefilter($rOriginal, IMG_FILTER_COLORIZE, 90, 60, 30);
@@ -592,17 +593,17 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function resize(
-		string	$strSource,
-		string	$strDestination,
-		int		$iNewWidth,
-		int		$iNewHeight,
-		bool	$bResample	= true,
-		?int	$iQuality	= null
+		string $strSource,
+		string $strDestination,
+		int    $iNewWidth,
+		int    $iNewHeight,
+		bool   $bResample = true,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
-		$rNew					= imagecreatetruecolor($iNewWidth, $iNewHeight);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
+		$rNew = imagecreatetruecolor($iNewWidth, $iNewHeight);
 
 		// Preserve alphatransparency in PNGs
 		imagealphablending($rNew, false);
@@ -631,23 +632,23 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function resize_to_width(
-		string	$strSource,
-		string	$strDestination,
-		int		$iNewWidth,
-		bool	$bResample	= true,
-		?int	$iQuality	= null
+		string $strSource,
+		string $strDestination,
+		int    $iNewWidth,
+		bool   $bResample = true,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
-		$fAspectRatio	= $arrInfo[1] / $arrInfo[0];
+		$fAspectRatio = $arrInfo[1] / $arrInfo[0];
 
 		// Adjust height proportionally to new width
-		$iNewHeight	= $iNewWidth * $fAspectRatio;
+		$iNewHeight = $iNewWidth * $fAspectRatio;
 
-		$rNew	= imagecreatetruecolor($iNewWidth, $iNewHeight);
+		$rNew = imagecreatetruecolor($iNewWidth, $iNewHeight);
 
 		// Preserve alphatransparency in PNGs
 		imagealphablending($rNew, false);
@@ -679,30 +680,30 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function resize_to_height(
-		string	$strSource,
-		string	$strDestination,
-		int		$iNewHeight,
-		bool	$bResample			= true,
-		?int	$iQuality			= null,
-		?string	$strNewType			= null,
-		bool	$bWhiteBackground	= false
+		string  $strSource,
+		string  $strDestination,
+		int     $iNewHeight,
+		bool    $bResample = true,
+		?int    $iQuality = null,
+		?string $strNewType = null,
+		bool    $bWhiteBackground = false
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
-		$fAspectRatio	= $arrInfo[1] / $arrInfo[0];
+		$fAspectRatio = $arrInfo[1] / $arrInfo[0];
 
 		// Adjust height proportionally to new width
-		$iNewWidth	= $iNewHeight / $fAspectRatio;
+		$iNewWidth = $iNewHeight / $fAspectRatio;
 
-		$rNew	= imagecreatetruecolor($iNewWidth, $iNewHeight);
+		$rNew = imagecreatetruecolor($iNewWidth, $iNewHeight);
 
 		if($bWhiteBackground)
 		{
 			// Make the standard background for transparent images WHITE instead of BLACK (e.g. when you convert from png to jpeg).
-			$iWhite	= imagecolorallocate($rNew, 255, 255, 255);
+			$iWhite = imagecolorallocate($rNew, 255, 255, 255);
 			imagefilledrectangle($rNew, 0, 0, $iNewWidth, $iNewHeight, $iWhite);
 		}
 		else
@@ -723,7 +724,7 @@ class SimpleImage
 
 		if($strNewType)
 		{
-			$arrInfo['mime']	= $strNewType;
+			$arrInfo['mime'] = $strNewType;
 		}
 
 		return $oImage->save($rNew, $strDestination, $arrInfo['mime'], $iQuality);
@@ -744,47 +745,47 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_fit(
-		string	$strSource,
-		string	$strDestination,
-		int		$iMaxWidth,
-		int		$iMaxHeight,
-		bool	$bResample			= true,
-		?int	$iQuality			= null,
-		?string	$strNewType			= null,
-		bool	$bWhiteBackground	= false
+		string  $strSource,
+		string  $strDestination,
+		int     $iMaxWidth,
+		int     $iMaxHeight,
+		bool    $bResample = true,
+		?int    $iQuality = null,
+		?string $strNewType = null,
+		bool    $bWhiteBackground = false
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
-		$fAspectRatio	= $arrInfo[1] / $arrInfo[0];
+		$fAspectRatio = $arrInfo[1] / $arrInfo[0];
 
 		// Make width fit into new dimensions
 		if($arrInfo[0] > $iMaxWidth)
 		{
-			$iNewWidth	= $iMaxWidth;
-			$iNewHeight	= $iNewWidth * $fAspectRatio;
+			$iNewWidth  = $iMaxWidth;
+			$iNewHeight = $iNewWidth * $fAspectRatio;
 		}
 		else
 		{
-			$iNewWidth	= $arrInfo[0];
-			$iNewHeight	= $arrInfo[1];
+			$iNewWidth  = $arrInfo[0];
+			$iNewHeight = $arrInfo[1];
 		}
 
 		// Make height fit into new dimensions
 		if($iNewHeight > $iMaxHeight)
 		{
-			$iNewHeight	= $iMaxHeight;
-			$iNewWidth	= $iNewHeight / $fAspectRatio;
+			$iNewHeight = $iMaxHeight;
+			$iNewWidth  = $iNewHeight / $fAspectRatio;
 		}
 
-		$rNew	= imagecreatetruecolor($iNewWidth, $iNewHeight);
+		$rNew = imagecreatetruecolor($iNewWidth, $iNewHeight);
 
 		if($bWhiteBackground)
 		{
 			// Make the standard background for transparent images WHITE instead of BLACK (e.g. when you convert from png to jpeg).
-			$iWhite	= imagecolorallocate($rNew, 255, 255, 255);
+			$iWhite = imagecolorallocate($rNew, 255, 255, 255);
 			imagefilledrectangle($rNew, 0, 0, $iNewWidth, $iNewHeight, $iWhite);
 		}
 		else
@@ -804,7 +805,7 @@ class SimpleImage
 		}
 		if($strNewType)
 		{
-			$arrInfo['mime']	= $strNewType;
+			$arrInfo['mime'] = $strNewType;
 		}
 
 		return $oImage->save($rNew, $strDestination, $arrInfo['mime'], $iQuality);
@@ -825,56 +826,56 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_square(
-		string	$strSource,
-		string	$strDestination,
-		int		$iSize,
-		bool	$bResample			= true,
-		?int	$iQuality			= null,
-		?string	$strNewType			= null,
-		bool	$bWhiteBackground	= false,
-		?string	$strBackgroundColor	= null
+		string  $strSource,
+		string  $strDestination,
+		int     $iSize,
+		bool    $bResample = true,
+		?int    $iQuality = null,
+		?string $strNewType = null,
+		bool    $bWhiteBackground = false,
+		?string $strBackgroundColor = null
 	): bool
 	{
 		if($strBackgroundColor === null)
 		{
-			$strBackgroundColor	= 'FFFFFF';
+			$strBackgroundColor = 'FFFFFF';
 		}
 
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
-		$fAspectRatio	= $arrInfo[1] / $arrInfo[0];
+		$fAspectRatio = $arrInfo[1] / $arrInfo[0];
 
 		// Make width fit into new dimensions
 		if($arrInfo[0] > $iSize)
 		{
-			$iNewWidth	= $iSize;
-			$iNewHeight	= $iNewWidth * $fAspectRatio;
+			$iNewWidth  = $iSize;
+			$iNewHeight = $iNewWidth * $fAspectRatio;
 		}
 		else
 		{
-			$iNewWidth	= $arrInfo[0];
-			$iNewHeight	= $arrInfo[1];
+			$iNewWidth  = $arrInfo[0];
+			$iNewHeight = $arrInfo[1];
 		}
 
 		// Make height fit into new dimensions
 		if($iNewHeight > $iSize)
 		{
-			$iNewHeight	= $iSize;
-			$iNewWidth	= $iNewHeight / $fAspectRatio;
+			$iNewHeight = $iSize;
+			$iNewWidth  = $iNewHeight / $fAspectRatio;
 		}
 
 		// Create the new image and fill it with white
-		$rNew				= imagecreatetruecolor($iSize, $iSize);
-		$arrRgb				= $oImage->hex2rgb($strBackgroundColor);
-		$iBackgroundColor	= imagecolorallocate($rNew, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
+		$rNew             = imagecreatetruecolor($iSize, $iSize);
+		$arrRgb           = $oImage->hex2rgb($strBackgroundColor);
+		$iBackgroundColor = imagecolorallocate($rNew, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
 		imagefill($rNew, 0, 0, $iBackgroundColor);
 
 		if($bWhiteBackground)
 		{
 			// Make the standard background for transparent images WHITE instead of BLACK (e.g. when you convert from png to jpeg).
-			$iWhite	= imagecolorallocate($rNew, 255, 255, 255);
+			$iWhite = imagecolorallocate($rNew, 255, 255, 255);
 
 			imagefilledrectangle(
 				$rNew,
@@ -892,21 +893,21 @@ class SimpleImage
 			imagesavealpha($rNew, true);
 		}
 
-		$arrPos	= [0, 0];
+		$arrPos = [0, 0];
 
 		// Find the new pos for the image
 		if($iSize > $iNewHeight)
 		{
-			$arrPos[1]	= ($iSize - $iNewHeight) / 2;
+			$arrPos[1] = ($iSize - $iNewHeight) / 2;
 		}
 		elseif($iSize > $iNewWidth)
 		{
-			$arrPos[0]	= ($iSize - $iNewWidth) / 2;
+			$arrPos[0] = ($iSize - $iNewWidth) / 2;
 		}
 
 		if($arrInfo[0] < $iSize && $arrInfo[1] < $iSize)
 		{
-			$arrPos[0]	= ($iSize - $arrInfo[0]) / 2;
+			$arrPos[0] = ($iSize - $arrInfo[0]) / 2;
 		}
 
 		if($bResample)
@@ -943,7 +944,7 @@ class SimpleImage
 		// Override mimetype (say you want to convert 'image/png' to 'image/jpeg'
 		if($strNewType)
 		{
-			$arrInfo['mime']	= $strNewType;
+			$arrInfo['mime'] = $strNewType;
 		}
 
 		return $oImage->save($rNew, $strDestination, $arrInfo['mime'], $iQuality);
@@ -961,11 +962,11 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_square_non_white(
-		string	$strSource,
-		string	$strDestination,
-		int		$iSize,
-		bool	$bResample	= true,
-		?int	$iQuality	= null
+		string $strSource,
+		string $strDestination,
+		int    $iSize,
+		bool   $bResample = true,
+		?int   $iQuality = null
 	): bool
 	{
 		SimpleImage::shrink_to_non_white($strSource);
@@ -984,10 +985,10 @@ class SimpleImage
 	 */
 	public static function get_color_at_position(string $strSource, int $iX = 0, int $iY = 0): string
 	{
-		$oImage		= new SimpleImage();
-		[$rImage]	= $oImage->load($strSource);
+		$oImage = new SimpleImage();
+		[$rImage] = $oImage->load($strSource);
 
-		$iColor	= imagecolorat($rImage, $iX, $iY);
+		$iColor = imagecolorat($rImage, $iX, $iY);
 
 		return Color::fromIntToHex($iColor, true);
 	}
@@ -1002,18 +1003,18 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_non_white(
-		string	$strSource,
-		?int	$iQuality			= 100,
-		?string	$strBackgroundColor	= null
+		string  $strSource,
+		?int    $iQuality = 100,
+		?string $strBackgroundColor = null
 	): bool
 	{
-		$oImage				= new SimpleImage();
-		[$rImage, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage();
+		[$rImage, $arrInfo] = $oImage->load($strSource);
 
-		$arrBox	= SimpleImage::imageTrimBox($rImage, $strBackgroundColor);
+		$arrBox = SimpleImage::imageTrimBox($rImage, $strBackgroundColor);
 
 		// Resize and crop
-		$rNewImage	= imagecreatetruecolor($arrBox['w'], $arrBox['h']);
+		$rNewImage = imagecreatetruecolor($arrBox['w'], $arrBox['h']);
 
 		// Preserve alphatransparency in PNGs
 		imagealphablending($rNewImage, false);
@@ -1036,21 +1037,21 @@ class SimpleImage
 	{
 		if(ctype_xdigit($mHexColor ?? ''))
 		{
-			$iColor	= $mHexColor;
+			$iColor = $mHexColor;
 		}
 		else
 		{
-			$iColor	= imagecolorat($rImage, 0, 0);
+			$iColor = imagecolorat($rImage, 0, 0);
 		}
 
-		$iOriginalWidth		= imagesx($rImage);
-		$iOriginalHeight	= imagesy($rImage);
-		$iNewWidth			= $iOriginalWidth;
-		$iNewHeight			= $iOriginalHeight;
-		$iTop				= 0;
-		$iBottom			= $iOriginalHeight;
-		$iLeft				= 0;
-		$iRight				= $iOriginalWidth;
+		$iOriginalWidth  = imagesx($rImage);
+		$iOriginalHeight = imagesy($rImage);
+		$iNewWidth       = $iOriginalWidth;
+		$iNewHeight      = $iOriginalHeight;
+		$iTop            = 0;
+		$iBottom         = $iOriginalHeight;
+		$iLeft           = 0;
+		$iRight          = $iOriginalWidth;
 
 		do
 		{
@@ -1069,8 +1070,8 @@ class SimpleImage
 			// stop if all pixels are trimmed
 			if($iTop === $iBottom)
 			{
-				$iTop			= 0;
-				$iResultCode	= 2;
+				$iTop        = 0;
+				$iResultCode = 2;
 				break 1;
 			}
 
@@ -1110,9 +1111,9 @@ class SimpleImage
 				}
 			}
 
-			$iNewWidth		= $iRight - $iLeft;
-			$iNewHeight		= $iBottom - $iTop;
-			$iResultCode	= ($iNewWidth < $iOriginalWidth || $iNewHeight < $iOriginalHeight) ? 1 : 0;
+			$iNewWidth   = $iRight - $iLeft;
+			$iNewHeight  = $iBottom - $iTop;
+			$iResultCode = ($iNewWidth < $iOriginalWidth || $iNewHeight < $iOriginalHeight) ? 1 : 0;
 		}
 		while(0);
 
@@ -1121,15 +1122,15 @@ class SimpleImage
 		// 1 = Trim Some Pixels
 		// 2 = Trim All Pixels
 		return [
-			'#'		=> $iResultCode,
-			'l'		=> $iLeft,
-			't'		=> $iTop,
-			'r'		=> $iRight,
-			'b'		=> $iBottom,
-			'w'		=> $iNewWidth,
-			'h'		=> $iNewHeight,
-			'w1'	=> $iOriginalWidth,
-			'h1'	=> $iOriginalHeight,
+			'#'  => $iResultCode,
+			'l'  => $iLeft,
+			't'  => $iTop,
+			'r'  => $iRight,
+			'b'  => $iBottom,
+			'w'  => $iNewWidth,
+			'h'  => $iNewHeight,
+			'w1' => $iOriginalWidth,
+			'h1' => $iOriginalHeight,
 		];
 	}
 
@@ -1150,43 +1151,43 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function crop(
-		string	$strSource,
-		string	$strDestination,
-		int		$iX1,
-		int		$iY1,
-		int		$iX2,
-		int		$iY2,
-		?int	$iNewWidth		= null,
-		?int	$iNewHeight		= null,
-		bool	$bResample		= true,
-		?int	$iQuality		= null
+		string $strSource,
+		string $strDestination,
+		int    $iX1,
+		int    $iY1,
+		int    $iX2,
+		int    $iY2,
+		?int   $iNewWidth = null,
+		?int   $iNewHeight = null,
+		bool   $bResample = true,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Crop size
 		if($iX2 < $iX1)
 		{
-			[$iX1, $iX2]	= [$iX2, $iX1];
+			[$iX1, $iX2] = [$iX2, $iX1];
 		}
 		if($iY2 < $iY1)
 		{
-			[$iY1, $iY2]	= [$iY2, $iY1];
+			[$iY1, $iY2] = [$iY2, $iY1];
 		}
-		$iCropWidth		= $iX2 - $iX1;
-		$iCropHeight	= $iY2 - $iY1;
+		$iCropWidth  = $iX2 - $iX1;
+		$iCropHeight = $iY2 - $iY1;
 
 		if($iNewWidth === null)
 		{
-			$iNewWidth	= $iCropWidth;
+			$iNewWidth = $iCropWidth;
 		}
 		if($iNewHeight === null)
 		{
-			$iNewHeight	= $iCropHeight;
+			$iNewHeight = $iCropHeight;
 		}
 
-		$rNew	= imagecreatetruecolor($iNewWidth, $iNewHeight);
+		$rNew = imagecreatetruecolor($iNewWidth, $iNewHeight);
 
 		// Preserve alphatransparency in PNGs
 		imagealphablending($rNew, false);
@@ -1216,38 +1217,38 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function square_crop(
-		string	$strSource,
-		string	$strDestination,
-		?int	$iNewSize	= null,
-		?int	$iQuality	= null
+		string $strSource,
+		string $strDestination,
+		?int   $iNewSize = null,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Calculate measurements
 		if($arrInfo[0] > $arrInfo[1])
 		{
 			// For landscape images
-			$iOffsetX		= ($arrInfo[0] - $arrInfo[1]) / 2;
-			$iOffsetY		= 0;
-			$iSquareSize	= $arrInfo[0] - ($iOffsetX * 2);
+			$iOffsetX    = ($arrInfo[0] - $arrInfo[1]) / 2;
+			$iOffsetY    = 0;
+			$iSquareSize = $arrInfo[0] - ($iOffsetX * 2);
 		}
 		else
 		{
 			// For portrait and square images
-			$iOffsetX		= 0;
-			$iOffsetY		= ($arrInfo[1] - $arrInfo[0]) / 2;
-			$iSquareSize	= $arrInfo[1] - ($iOffsetY * 2);
+			$iOffsetX    = 0;
+			$iOffsetY    = ($arrInfo[1] - $arrInfo[0]) / 2;
+			$iSquareSize = $arrInfo[1] - ($iOffsetY * 2);
 		}
 
 		if($iNewSize === null)
 		{
-			$iNewSize	= $iSquareSize;
+			$iNewSize = $iSquareSize;
 		}
 
 		// Resize and crop
-		$rNew	= imagecreatetruecolor($iNewSize, $iNewSize);
+		$rNew = imagecreatetruecolor($iNewSize, $iNewSize);
 
 		// Preserve alphatransparency in PNGs
 		imagealphablending($rNew, false);
@@ -1272,77 +1273,77 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function watermark(
-		string	$strSource,
-		string	$strDestination,
-		string	$strWatermarkSource,
-		string	$strPosition	= 'center',
-		int		$iOpacity		= 50,
-		int		$iMargin		= 0,
-		?int	$iQuality		= null
+		string $strSource,
+		string $strDestination,
+		string $strWatermarkSource,
+		string $strPosition = 'center',
+		int    $iOpacity = 50,
+		int    $iMargin = 0,
+		?int   $iQuality = null
 	): bool
 	{
-		$oImage								= new SimpleImage;
-		[$rOriginal, $arrInfo]				= $oImage->load($strSource);
-		[$rWatermark, $arrWatermarkInfo]	= $oImage->load($strWatermarkSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
+		[$rWatermark, $arrWatermarkInfo] = $oImage->load($strWatermarkSource);
 
 		switch(strtolower($strPosition))
 		{
 			case 'top-left':
 			case 'left-top':
-				$iX	= 0 + $iMargin;
-				$iY	= 0 + $iMargin;
+				$iX = 0 + $iMargin;
+				$iY = 0 + $iMargin;
 				break;
 
 			case 'top-right':
 			case 'right-top':
-				$iX	= $arrInfo[0] - $arrWatermarkInfo[0] - $iMargin;
-				$iY	= 0 + $iMargin;
+				$iX = $arrInfo[0] - $arrWatermarkInfo[0] - $iMargin;
+				$iY = 0 + $iMargin;
 				break;
 
 			case 'top':
 			case 'top-center':
 			case 'center-top':
-				$iX	= ($arrInfo[0] / 2) - ($arrWatermarkInfo[0] / 2);
-				$iY	= 0 + $iMargin;
+				$iX = ($arrInfo[0] / 2) - ($arrWatermarkInfo[0] / 2);
+				$iY = 0 + $iMargin;
 				break;
 
 			case 'bottom-left':
 			case 'left-bottom':
-				$iX	= 0 + $iMargin;
-				$iY	= $arrInfo[1] - $arrWatermarkInfo[1] - $iMargin;
+				$iX = 0 + $iMargin;
+				$iY = $arrInfo[1] - $arrWatermarkInfo[1] - $iMargin;
 				break;
 
 			case 'bottom-right':
 			case 'right-bottom':
-				$iX	= $arrInfo[0] - $arrWatermarkInfo[0] - $iMargin;
-				$iY	= $arrInfo[1] - $arrWatermarkInfo[1] - $iMargin;
+				$iX = $arrInfo[0] - $arrWatermarkInfo[0] - $iMargin;
+				$iY = $arrInfo[1] - $arrWatermarkInfo[1] - $iMargin;
 				break;
 
 			case 'bottom':
 			case 'bottom-center':
 			case 'center-bottom':
-				$iX	= ($arrInfo[0] / 2) - ($arrWatermarkInfo[0] / 2);
-				$iY	= $arrInfo[1] - $arrWatermarkInfo[1] - $iMargin;
+				$iX = ($arrInfo[0] / 2) - ($arrWatermarkInfo[0] / 2);
+				$iY = $arrInfo[1] - $arrWatermarkInfo[1] - $iMargin;
 				break;
 
 			case 'left':
 			case 'center-left':
 			case 'left-center':
-				$iX	= 0 + $iMargin;
-				$iY	= ($arrInfo[1] / 2) - ($arrWatermarkInfo[1] / 2);
+				$iX = 0 + $iMargin;
+				$iY = ($arrInfo[1] / 2) - ($arrWatermarkInfo[1] / 2);
 				break;
 
 			case 'right':
 			case 'center-right':
 			case 'right-center':
-				$iX	= $arrInfo[0] - $arrWatermarkInfo[0] - $iMargin;
-				$iY	= ($arrInfo[1] / 2) - ($arrWatermarkInfo[1] / 2);
+				$iX = $arrInfo[0] - $arrWatermarkInfo[0] - $iMargin;
+				$iY = ($arrInfo[1] / 2) - ($arrWatermarkInfo[1] / 2);
 				break;
 
 			case 'center':
 			default:
-				$iX	= ($arrInfo[0] / 2) - ($arrWatermarkInfo[0] / 2);
-				$iY	= ($arrInfo[1] / 2) - ($arrWatermarkInfo[1] / 2);
+				$iX = ($arrInfo[0] / 2) - ($arrWatermarkInfo[0] / 2);
+				$iY = ($arrInfo[1] / 2) - ($arrWatermarkInfo[1] / 2);
 				break;
 		}
 
@@ -1370,102 +1371,102 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function text(
-		string	$strSource,
-		string	$strDestination,
-		string	$strText,
-		string	$strFontFile,
-		int		$iSize			= 12,
-		string	$strColor		= '#000000',
-		string	$strPosition	= 'center',
-		int		$iMargin		= 0,
-		?string	$strShadowColor	= null,
-		int		$iShadowOffsetX	= 0,
-		int		$iShadowOffsetY	= 0,
-		?int	$iQuality		= null
+		string  $strSource,
+		string  $strDestination,
+		string  $strText,
+		string  $strFontFile,
+		int     $iSize = 12,
+		string  $strColor = '#000000',
+		string  $strPosition = 'center',
+		int     $iMargin = 0,
+		?string $strShadowColor = null,
+		int     $iShadowOffsetX = 0,
+		int     $iShadowOffsetY = 0,
+		?int    $iQuality = null
 	): bool
 	{
 		// This method could be improved to support the text angle
-		$iAngle	= 0;
+		$iAngle = 0;
 
-		$oImage					= new SimpleImage;
-		[$rOriginal, $arrInfo]	= $oImage->load($strSource);
+		$oImage = new SimpleImage;
+		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
-		$arrRgb		= $oImage->hex2rgb($strColor);
-		$strColor	= imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
+		$arrRgb   = $oImage->hex2rgb($strColor);
+		$strColor = imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
 
 		// Determine text size
-		$arrBox	= imagettfbbox($iSize, $iAngle, $strFontFile, $strText);
+		$arrBox = imagettfbbox($iSize, $iAngle, $strFontFile, $strText);
 
 		// Horizontal
-		$iTextWidth		= abs($arrBox[6] - $arrBox[2]);
-		$iTextHeight	= abs($arrBox[7] - $arrBox[3]);
+		$iTextWidth  = abs($arrBox[6] - $arrBox[2]);
+		$iTextHeight = abs($arrBox[7] - $arrBox[3]);
 
 
 		switch(strtolower($strPosition))
 		{
 			case 'top-left':
 			case 'left-top':
-				$iX	= 0 + $iMargin;
-				$iY	= 0 + $iSize + $iMargin;
+				$iX = 0 + $iMargin;
+				$iY = 0 + $iSize + $iMargin;
 				break;
 
 			case 'top-right':
 			case 'right-top':
-				$iX	= $arrInfo[0] - $iTextWidth - $iMargin;
-				$iY	= 0 + $iSize + $iMargin;
+				$iX = $arrInfo[0] - $iTextWidth - $iMargin;
+				$iY = 0 + $iSize + $iMargin;
 				break;
 
 			case 'top':
 			case 'top-center':
 			case 'center-top':
-				$iX	= ($arrInfo[0] / 2) - ($iTextWidth / 2);
-				$iY	= 0 + $iSize + $iMargin;
+				$iX = ($arrInfo[0] / 2) - ($iTextWidth / 2);
+				$iY = 0 + $iSize + $iMargin;
 				break;
 
 			case 'bottom-left':
 			case 'left-bottom':
-				$iX	= 0 + $iMargin;
-				$iY	= $arrInfo[1] - $iTextHeight - $iMargin + $iSize;
+				$iX = 0 + $iMargin;
+				$iY = $arrInfo[1] - $iTextHeight - $iMargin + $iSize;
 				break;
 
 			case 'bottom-right':
 			case 'right-bottom':
-				$iX	= $arrInfo[0] - $iTextWidth - $iMargin;
-				$iY	= $arrInfo[1] - $iTextHeight - $iMargin + $iSize;
+				$iX = $arrInfo[0] - $iTextWidth - $iMargin;
+				$iY = $arrInfo[1] - $iTextHeight - $iMargin + $iSize;
 				break;
 
 			case 'bottom':
 			case 'bottom-center':
 			case 'center-bottom':
-				$iX	= ($arrInfo[0] / 2) - ($iTextWidth / 2);
-				$iY	= $arrInfo[1] - $iTextHeight - $iMargin + $iSize;
+				$iX = ($arrInfo[0] / 2) - ($iTextWidth / 2);
+				$iY = $arrInfo[1] - $iTextHeight - $iMargin + $iSize;
 				break;
 
 			case 'left':
 			case 'center-left':
 			case 'left-center':
-				$iX	= 0 + $iMargin;
-				$iY	= ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
+				$iX = 0 + $iMargin;
+				$iY = ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
 				break;
 
 			case 'right';
 			case 'center-right':
 			case 'right-center':
-				$iX	= $arrInfo[0] - $iTextWidth - $iMargin;
-				$iY	= ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
+				$iX = $arrInfo[0] - $iTextWidth - $iMargin;
+				$iY = ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
 				break;
 
 			case 'center':
 			default:
-				$iX	= ($arrInfo[0] / 2) - ($iTextWidth / 2);
-				$iY	= ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
+				$iX = ($arrInfo[0] / 2) - ($iTextWidth / 2);
+				$iY = ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
 				break;
 		}
 
 		if($strShadowColor)
 		{
-			$arrRgb			= $oImage->hex2rgb($strShadowColor);
-			$strShadowColor	= imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
+			$arrRgb         = $oImage->hex2rgb($strShadowColor);
+			$strShadowColor = imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
 			imagettftext($rOriginal, $iSize, $iAngle, $iX + $iShadowOffsetX, $iY + $iShadowOffsetY, $strShadowColor, $strFontFile, $strText);
 		}
 

@@ -47,7 +47,7 @@ class SimpleImageTest extends TestCase
 	 *
 	 * @return bool
 	 */
-	private static function SaveImage($rImage, string $strFilePath, ?int $iQuality = null): bool
+	private static function SaveImage($rImage, string $strFilePath, int|null $iQuality = null): bool
 	{
 		switch(pathinfo($strFilePath, PATHINFO_EXTENSION))
 		{
@@ -105,7 +105,7 @@ class SimpleImageTest extends TestCase
 	 *
 	 * @return bool
 	 */
-	private static function GenerateRandomImage(string $strFilePath, int $iWidth = 100, int $iHeight = 100, ?int $iQuality = null): bool
+	private static function GenerateRandomImage(string $strFilePath, int $iWidth = 100, int $iHeight = 100, int|null $iQuality = null): bool
 	{
 		$rImage = imagecreatetruecolor($iWidth, $iHeight);
 
@@ -139,7 +139,7 @@ class SimpleImageTest extends TestCase
 	 *
 	 * @return bool
 	 */
-	private static function GenerateWhiteImage(string $strFilePath, int $iWidth = 100, int $iHeight = 100, ?int $iQuality = null): bool
+	private static function GenerateWhiteImage(string $strFilePath, int $iWidth = 100, int $iHeight = 100, int|null $iQuality = null): bool
 	{
 		$rImage = imagecreatetruecolor($iWidth, $iHeight);
 
@@ -165,7 +165,7 @@ class SimpleImageTest extends TestCase
 	 *
 	 * @return bool
 	 */
-	private static function GenerateWhiteImageWithBlackCenter(string $strFilePath, int $iWidth = 100, int $iHeight = 100, int $iCenterWidth = 50, int $iCenterHeight = 50, ?int $iQuality = null): bool
+	private static function GenerateWhiteImageWithBlackCenter(string $strFilePath, int $iWidth = 100, int $iHeight = 100, int $iCenterWidth = 50, int $iCenterHeight = 50, int|null $iQuality = null): bool
 	{
 		$rImage = imagecreatetruecolor($iWidth, $iHeight);
 
@@ -216,7 +216,7 @@ class SimpleImageTest extends TestCase
 	 * @param int      $iMode
 	 * @param int|null $iQuality
 	 */
-	private static function AssertImageFlipped(string $strSourceFilePath, string $strDestinationFilePath, int $iMode, ?int $iQuality = null): void
+	private static function AssertImageFlipped(string $strSourceFilePath, string $strDestinationFilePath, int $iMode, int|null $iQuality = null): void
 	{
 		try
 		{
@@ -243,7 +243,7 @@ class SimpleImageTest extends TestCase
 	 * @param int      $iBackgroundColor
 	 * @param int|null $iQuality
 	 */
-	private static function AssertImageRotated(string $strSourceFilePath, string $strDestinationFilePath, int $iAngle, int $iBackgroundColor = 0, ?int $iQuality = null): void
+	private static function AssertImageRotated(string $strSourceFilePath, string $strDestinationFilePath, int $iAngle, int $iBackgroundColor = 0, int|null $iQuality = null): void
 	{
 		try
 		{
@@ -273,7 +273,7 @@ class SimpleImageTest extends TestCase
 	 * @param int|null $iArg4
 	 * @param int|null $iQuality
 	 */
-	private static function AssertImageFilterApplied(string $strSourceFilePath, string $strDestinationFilePath, int $iFilterType, ?int $iArg1 = null, ?int $iArg2 = null, ?int $iArg3 = null, ?int $iArg4 = null, ?int $iQuality = null): void
+	private static function AssertImageFilterApplied(string $strSourceFilePath, string $strDestinationFilePath, int $iFilterType, int|null $iArg1 = null, int|null $iArg2 = null, int|null $iArg3 = null, int|null $iArg4 = null, int|null $iQuality = null): void
 	{
 		try
 		{

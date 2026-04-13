@@ -66,7 +66,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	private function save($rImage, string $strFilePath, string $strType, ?int $iQuality = null): bool
+	private function save($rImage, string $strFilePath, string $strType, int|null $iQuality = null): bool
 	{
 		switch($strType)
 		{
@@ -197,7 +197,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function convert(string $strSource, string $strDestination, ?int $iQuality = null): bool
+	public static function convert(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal] = $oImage->load($strSource);
@@ -232,10 +232,10 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function flip(
-		string $strSource,
-		string $strDestination,
-		string $strDirection,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		string   $strDirection,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -279,11 +279,11 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function rotate(
-		string $strSource,
-		string $strDestination,
-		       $mAngle = 270,
-		string $strBackgroundColor = '#FFFFFF',
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		         $mAngle = 270,
+		string   $strBackgroundColor = '#FFFFFF',
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -329,7 +329,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function grayscale(string $strSource, string $strDestination, ?int $iQuality = null): bool
+	public static function grayscale(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -348,7 +348,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function invert(string $strSouce, string $strDestination, ?int $iQuality = null): bool
+	public static function invert(string $strSouce, string $strDestination, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSouce);
@@ -368,7 +368,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function brightness(string $strSource, string $strDestination, int $iLevel, ?int $iQuality = null): bool
+	public static function brightness(string $strSource, string $strDestination, int $iLevel, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -388,7 +388,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function contrast(string $strSource, string $strDestination, int $iLevel, ?int $iQuality = null): bool
+	public static function contrast(string $strSource, string $strDestination, int $iLevel, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -412,13 +412,13 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function colorize(
-		string $strSource,
-		string $strDestination,
-		int    $iRed,
-		int    $iGreen,
-		int    $iBlue,
-		int    $iAlpha,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int      $iRed,
+		int      $iGreen,
+		int      $iBlue,
+		int      $iAlpha,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -438,7 +438,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function edgedetect(string $strSource, string $strDestination, ?int $iQuality = null): bool
+	public static function edgedetect(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -457,7 +457,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function emboss(string $strSource, string $strDestination, ?int $iQuality = null): bool
+	public static function emboss(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -477,7 +477,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function blur(string $strSource, string $strDestination, int $iLevel = 1, ?int $iQuality = null): bool
+	public static function blur(string $strSource, string $strDestination, int $iLevel = 1, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -500,7 +500,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function sketch(string $strSource, string $strDestination, int $iLevel = 1, ?int $iQuality = null): bool
+	public static function sketch(string $strSource, string $strDestination, int $iLevel = 1, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -523,7 +523,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function smooth(string $strSource, string $strDestination, int $iLevel, ?int $iQuality = null): bool
+	public static function smooth(string $strSource, string $strDestination, int $iLevel, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -545,11 +545,11 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function pixelate(
-		string $strSource,
-		string $strDestination,
-		int    $iBlockSize,
-		bool   $bAdvancedPix = false,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int      $iBlockSize,
+		bool     $bAdvancedPix = false,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -569,7 +569,7 @@ class SimpleImage
 	 *
 	 * @return bool
 	 */
-	public static function sepia(string $strSource, string $strDestination, ?int $iQuality = null): bool
+	public static function sepia(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
 		$oImage = new SimpleImage;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
@@ -593,12 +593,12 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function resize(
-		string $strSource,
-		string $strDestination,
-		int    $iNewWidth,
-		int    $iNewHeight,
-		bool   $bResample = true,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int      $iNewWidth,
+		int      $iNewHeight,
+		bool     $bResample = true,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -632,11 +632,11 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function resize_to_width(
-		string $strSource,
-		string $strDestination,
-		int    $iNewWidth,
-		bool   $bResample = true,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int      $iNewWidth,
+		bool     $bResample = true,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -680,13 +680,13 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function resize_to_height(
-		string  $strSource,
-		string  $strDestination,
-		int     $iNewHeight,
-		bool    $bResample = true,
-		?int    $iQuality = null,
-		?string $strNewType = null,
-		bool    $bWhiteBackground = false
+		string      $strSource,
+		string      $strDestination,
+		int         $iNewHeight,
+		bool        $bResample = true,
+		int|null    $iQuality = null,
+		string|null $strNewType = null,
+		bool        $bWhiteBackground = false
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -745,14 +745,14 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_fit(
-		string  $strSource,
-		string  $strDestination,
-		int     $iMaxWidth,
-		int     $iMaxHeight,
-		bool    $bResample = true,
-		?int    $iQuality = null,
-		?string $strNewType = null,
-		bool    $bWhiteBackground = false
+		string      $strSource,
+		string      $strDestination,
+		int         $iMaxWidth,
+		int         $iMaxHeight,
+		bool        $bResample = true,
+		int|null    $iQuality = null,
+		string|null $strNewType = null,
+		bool        $bWhiteBackground = false
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -826,14 +826,14 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_square(
-		string  $strSource,
-		string  $strDestination,
-		int     $iSize,
-		bool    $bResample = true,
-		?int    $iQuality = null,
-		?string $strNewType = null,
-		bool    $bWhiteBackground = false,
-		?string $strBackgroundColor = null
+		string      $strSource,
+		string      $strDestination,
+		int         $iSize,
+		bool        $bResample = true,
+		int|null    $iQuality = null,
+		string|null $strNewType = null,
+		bool        $bWhiteBackground = false,
+		string|null $strBackgroundColor = null
 	): bool
 	{
 		if($strBackgroundColor === null)
@@ -962,11 +962,11 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_square_non_white(
-		string $strSource,
-		string $strDestination,
-		int    $iSize,
-		bool   $bResample = true,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int      $iSize,
+		bool     $bResample = true,
+		int|null $iQuality = null
 	): bool
 	{
 		SimpleImage::shrink_to_non_white($strSource);
@@ -1003,9 +1003,9 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function shrink_to_non_white(
-		string  $strSource,
-		?int    $iQuality = 100,
-		?string $strBackgroundColor = null
+		string      $strSource,
+		int|null    $iQuality = 100,
+		string|null $strBackgroundColor = null
 	): bool
 	{
 		$oImage = new SimpleImage();
@@ -1151,16 +1151,16 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function crop(
-		string $strSource,
-		string $strDestination,
-		int    $iX1,
-		int    $iY1,
-		int    $iX2,
-		int    $iY2,
-		?int   $iNewWidth = null,
-		?int   $iNewHeight = null,
-		bool   $bResample = true,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int      $iX1,
+		int      $iY1,
+		int      $iX2,
+		int      $iY2,
+		int|null $iNewWidth = null,
+		int|null $iNewHeight = null,
+		bool     $bResample = true,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -1217,10 +1217,10 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function square_crop(
-		string $strSource,
-		string $strDestination,
-		?int   $iNewSize = null,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		int|null $iNewSize = null,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -1273,13 +1273,13 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function watermark(
-		string $strSource,
-		string $strDestination,
-		string $strWatermarkSource,
-		string $strPosition = 'center',
-		int    $iOpacity = 50,
-		int    $iMargin = 0,
-		?int   $iQuality = null
+		string   $strSource,
+		string   $strDestination,
+		string   $strWatermarkSource,
+		string   $strPosition = 'center',
+		int      $iOpacity = 50,
+		int      $iMargin = 0,
+		int|null $iQuality = null
 	): bool
 	{
 		$oImage = new SimpleImage;
@@ -1371,18 +1371,18 @@ class SimpleImage
 	 * @return bool
 	 */
 	public static function text(
-		string  $strSource,
-		string  $strDestination,
-		string  $strText,
-		string  $strFontFile,
-		int     $iSize = 12,
-		string  $strColor = '#000000',
-		string  $strPosition = 'center',
-		int     $iMargin = 0,
-		?string $strShadowColor = null,
-		int     $iShadowOffsetX = 0,
-		int     $iShadowOffsetY = 0,
-		?int    $iQuality = null
+		string      $strSource,
+		string      $strDestination,
+		string      $strText,
+		string      $strFontFile,
+		int         $iSize = 12,
+		string      $strColor = '#000000',
+		string      $strPosition = 'center',
+		int         $iMargin = 0,
+		string|null $strShadowColor = null,
+		int         $iShadowOffsetX = 0,
+		int         $iShadowOffsetY = 0,
+		int|null    $iQuality = null
 	): bool
 	{
 		// This method could be improved to support the text angle

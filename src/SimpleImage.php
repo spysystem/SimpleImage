@@ -293,7 +293,24 @@ class SimpleImage
 			$mAngle = 90;
 		}
 
-		$arrRgb           = $oImage->hex2rgb($strBackgroundColor);
+		$arrRgb = $oImage->hex2rgb($strBackgroundColor);
+		if($arrRgb === false && is_numeric($strBackgroundColor))
+		{
+			$iColor = (int)$strBackgroundColor;
+			$arrRgb = [
+				'r' => ($iColor >> 16) & 255,
+				'g' => ($iColor >> 8) & 255,
+				'b' => $iColor & 255,
+			];
+		}
+		if($arrRgb === false)
+		{
+			$arrRgb = [
+				'r' => 255,
+				'g' => 255,
+				'b' => 255,
+			];
+		}
 		$iBackgroundColor = imagecolorallocate($rOriginal, $arrRgb['r'], $arrRgb['g'], $arrRgb['b']);
 		$rNew             = imagerotate($rOriginal, $mAngle, $iBackgroundColor);
 
@@ -394,30 +411,30 @@ class SimpleImage
 	/**
 	 * Colorize an image (requires PHP 5.2.5+)
 	 *
-	 * @param string   $strSource
-	 * @param string   $strDestination
-	 * @param int      $iRed
-	 * @param int      $iGreen
-	 * @param int      $iBlue
-	 * @param int      $iAlpha
-	 * @param int|null $iQuality
+	 * @param string    $strSource
+	 * @param string    $strDestination
+	 * @param int       $iRed
+	 * @param int       $iGreen
+	 * @param int       $iBlue
+	 * @param int|float $iAlpha
+	 * @param int|null  $iQuality
 	 *
 	 * @return bool
 	 */
 	public static function colorize(
-		string   $strSource,
-		string   $strDestination,
-		int      $iRed,
-		int      $iGreen,
-		int      $iBlue,
-		int      $iAlpha,
-		int|null $iQuality = null
+		string    $strSource,
+		string    $strDestination,
+		int       $iRed,
+		int       $iGreen,
+		int       $iBlue,
+		float|int $iAlpha,
+		int|null  $iQuality = null
 	): bool
 	{
 		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
-		imagefilter($rOriginal, IMG_FILTER_COLORIZE, $iRed, $iGreen, $iBlue, $iAlpha);
+		imagefilter($rOriginal, IMG_FILTER_COLORIZE, $iRed, $iGreen, $iBlue, (int)$iAlpha);
 
 		return $oImage->save($rOriginal, $strDestination, $arrInfo['mime'], $iQuality);
 	}
@@ -1442,7 +1459,7 @@ class SimpleImage
 				$iY = ($arrInfo[1] / 2) - (($iTextHeight / 2) - $iSize);
 				break;
 
-			case 'right';
+			case 'right':
 			case 'center-right':
 			case 'right-center':
 				$iX = $arrInfo[0] - $iTextWidth - $iMargin;

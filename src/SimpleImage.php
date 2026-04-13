@@ -199,7 +199,7 @@ class SimpleImage
 	 */
 	public static function convert(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal] = $oImage->load($strSource);
 
 		switch(strtolower(preg_replace('/^.*\./', '', $strDestination)))
@@ -238,7 +238,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		$rNew = imagecreatetruecolor($arrInfo[0], $arrInfo[1]);
@@ -286,7 +286,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine angle
@@ -331,7 +331,7 @@ class SimpleImage
 	 */
 	public static function grayscale(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_GRAYSCALE);
@@ -350,7 +350,7 @@ class SimpleImage
 	 */
 	public static function invert(string $strSouce, string $strDestination, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSouce);
 
 		imagefilter($rOriginal, IMG_FILTER_NEGATE);
@@ -370,7 +370,7 @@ class SimpleImage
 	 */
 	public static function brightness(string $strSource, string $strDestination, int $iLevel, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_BRIGHTNESS, $iLevel);
@@ -390,7 +390,7 @@ class SimpleImage
 	 */
 	public static function contrast(string $strSource, string $strDestination, int $iLevel, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_CONTRAST, $iLevel);
@@ -421,7 +421,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_COLORIZE, $iRed, $iGreen, $iBlue, $iAlpha);
@@ -440,7 +440,7 @@ class SimpleImage
 	 */
 	public static function edgedetect(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_EDGEDETECT);
@@ -459,7 +459,7 @@ class SimpleImage
 	 */
 	public static function emboss(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_EMBOSS);
@@ -479,7 +479,7 @@ class SimpleImage
 	 */
 	public static function blur(string $strSource, string $strDestination, int $iLevel = 1, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		for($iCount = 0; $iCount < $iLevel; $iCount++)
@@ -502,7 +502,7 @@ class SimpleImage
 	 */
 	public static function sketch(string $strSource, string $strDestination, int $iLevel = 1, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		for($iCount = 0; $iCount < $iLevel; $iCount++)
@@ -525,7 +525,7 @@ class SimpleImage
 	 */
 	public static function smooth(string $strSource, string $strDestination, int $iLevel, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_SMOOTH, $iLevel);
@@ -552,7 +552,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_PIXELATE, $iBlockSize, $bAdvancedPix);
@@ -571,7 +571,7 @@ class SimpleImage
 	 */
 	public static function sepia(string $strSource, string $strDestination, int|null $iQuality = null): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		imagefilter($rOriginal, IMG_FILTER_GRAYSCALE);
@@ -601,7 +601,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 		$rNew = imagecreatetruecolor($iNewWidth, $iNewHeight);
 
@@ -639,7 +639,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
@@ -689,7 +689,7 @@ class SimpleImage
 		bool        $bWhiteBackground = false
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
@@ -755,7 +755,7 @@ class SimpleImage
 		bool        $bWhiteBackground = false
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
@@ -841,7 +841,7 @@ class SimpleImage
 			$strBackgroundColor = 'FFFFFF';
 		}
 
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Determine aspect ratio
@@ -969,9 +969,9 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		SimpleImage::shrink_to_non_white($strSource);
+		self::shrink_to_non_white($strSource);
 
-		return SimpleImage::shrink_to_square($strSource, $strDestination, $iSize, $bResample, $iQuality);
+		return self::shrink_to_square($strSource, $strDestination, $iSize, $bResample, $iQuality);
 	}
 
 	/**
@@ -985,7 +985,7 @@ class SimpleImage
 	 */
 	public static function get_color_at_position(string $strSource, int $iX = 0, int $iY = 0): string
 	{
-		$oImage = new SimpleImage();
+		$oImage = new self();
 		[$rImage] = $oImage->load($strSource);
 
 		$iColor = imagecolorat($rImage, $iX, $iY);
@@ -1008,10 +1008,10 @@ class SimpleImage
 		string|null $strBackgroundColor = null
 	): bool
 	{
-		$oImage = new SimpleImage();
+		$oImage = new self();
 		[$rImage, $arrInfo] = $oImage->load($strSource);
 
-		$arrBox = SimpleImage::imageTrimBox($rImage, $strBackgroundColor);
+		$arrBox = self::imageTrimBox($rImage, $strBackgroundColor);
 
 		// Resize and crop
 		$rNewImage = imagecreatetruecolor($arrBox['w'], $arrBox['h']);
@@ -1163,7 +1163,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Crop size
@@ -1223,7 +1223,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		// Calculate measurements
@@ -1282,7 +1282,7 @@ class SimpleImage
 		int|null $iQuality = null
 	): bool
 	{
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 		[$rWatermark, $arrWatermarkInfo] = $oImage->load($strWatermarkSource);
 
@@ -1388,7 +1388,7 @@ class SimpleImage
 		// This method could be improved to support the text angle
 		$iAngle = 0;
 
-		$oImage = new SimpleImage;
+		$oImage = new self;
 		[$rOriginal, $arrInfo] = $oImage->load($strSource);
 
 		$arrRgb   = $oImage->hex2rgb($strColor);

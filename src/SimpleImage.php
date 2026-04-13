@@ -50,7 +50,6 @@ class SimpleImage
 			default:
 				// Unsupported image type
 				return false;
-				break;
 		}
 
 		return [$rImage, $arrInfo];
@@ -72,7 +71,6 @@ class SimpleImage
 		{
 			case 'image/gif':
 				return imagegif($rImage, $strFilePath);
-				break;
 
 			case 'image/jpeg':
 				if($iQuality === null)
@@ -89,7 +87,6 @@ class SimpleImage
 				}
 
 				return imagejpeg($rImage, $strFilePath, $iQuality);
-				break;
 
 			case 'image/png':
 				if($iQuality === null)
@@ -106,7 +103,6 @@ class SimpleImage
 				}
 
 				return imagepng($rImage, $strFilePath, $iQuality);
-				break;
 		}
 
 		return false;
@@ -206,16 +202,13 @@ class SimpleImage
 		{
 			case 'gif':
 				return $oImage->save($rOriginal, $strDestination, 'image/gif');
-				break;
 
 			case 'jpg':
 			case 'jpeg':
 				return $oImage->save($rOriginal, $strDestination, 'image/jpeg', $iQuality);
-				break;
 
 			case 'png':
 				return $oImage->save($rOriginal, $strDestination, 'image/png', $iQuality);
-				break;
 		}
 
 		return false;

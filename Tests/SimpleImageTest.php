@@ -23,15 +23,12 @@ class SimpleImageTest extends TestCase
 		{
 			case 'gif':
 				return imagecreatefromgif($strFilePath);
-				break;
 
 			case 'jpg':
 				return imagecreatefromjpeg($strFilePath);
-				break;
 
 			case 'png':
 				return imagecreatefrompng($strFilePath);
-				break;
 		}
 
 		self::fail('Unsupported file type: '.$strFilePath);
@@ -53,7 +50,6 @@ class SimpleImageTest extends TestCase
 		{
 			case 'gif':
 				return imagegif($rImage, $strFilePath);
-				break;
 
 			case 'jpg':
 				if($iQuality == null)
@@ -70,7 +66,6 @@ class SimpleImageTest extends TestCase
 				}
 
 				return imagejpeg($rImage, $strFilePath, $iQuality);
-				break;
 
 			case 'png':
 				if($iQuality == null)
@@ -87,7 +82,6 @@ class SimpleImageTest extends TestCase
 				}
 
 				return imagepng($rImage, $strFilePath, $iQuality);
-				break;
 		}
 
 		self::fail('Unsupported file type: '.$strFilePath);

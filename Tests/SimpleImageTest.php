@@ -258,24 +258,33 @@ class SimpleImageTest extends TestCase
 	}
 
 	/**
-	 * @param string   $strSourceFilePath
-	 * @param string   $strDestinationFilePath
-	 * @param int      $iFilterType
-	 * @param int|null $iArg1
-	 * @param int|null $iArg2
-	 * @param int|null $iArg3
-	 * @param int|null $iArg4
-	 * @param int|null $iQuality
+	 * @param string         $strSourceFilePath
+	 * @param string         $strDestinationFilePath
+	 * @param int            $iFilterType
+	 * @param int|float|null $iArg1
+	 * @param int|float|null $iArg2
+	 * @param int|float|null $iArg3
+	 * @param int|float|null $iArg4
+	 * @param int|null       $iQuality
 	 */
-	private static function AssertImageFilterApplied(string $strSourceFilePath, string $strDestinationFilePath, int $iFilterType, int|null $iArg1 = null, int|null $iArg2 = null, int|null $iArg3 = null, int|null $iArg4 = null, int|null $iQuality = null): void
+	private static function AssertImageFilterApplied(
+		string         $strSourceFilePath,
+		string         $strDestinationFilePath,
+		int            $iFilterType,
+		int|float|null $iArg1 = null,
+		int|float|null $iArg2 = null,
+		int|float|null $iArg3 = null,
+		int|float|null $iArg4 = null,
+		int|null       $iQuality = null,
+	): void
 	{
 		try
 		{
 			$strTemporaryFilePath = './assert-image-filter-applied.'.pathinfo($strSourceFilePath, PATHINFO_EXTENSION);
 			$rImage               = self::LoadImage($strSourceFilePath);
-			imagefilter($rImage, $iFilterType, ...array_filter([$iArg1, $iArg2, $iArg3, $iArg4], static function($mValue): bool {
+			imagefilter($rImage, $iFilterType, ...array_map(intval(...), array_filter([$iArg1, $iArg2, $iArg3, $iArg4], static function($mValue): bool {
 				return $mValue !== null;
-			}));
+			})));
 			self::assertTrue(self::SaveImage($rImage, $strTemporaryFilePath, $iQuality));
 			self::assertFileEquals($strTemporaryFilePath, $strDestinationFilePath);
 			unlink($strTemporaryFilePath);
